@@ -1,0 +1,46 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+
+    <title>Accueil</title>
+</head>
+
+<body>
+    <header>
+        <img src="" alt="logo" class="logo">
+    </header>
+    <main>
+        <section class="left">
+            <a href=""><i class="fas fa-home"></i>&nbsp; &nbsp; Accueil </a>
+            <a href=""><i class="fas fa-comments"></i>&nbsp; &nbsp; Session </a>
+            <a href="" class="grass"><i class="fas fa-user"></i>&nbsp; &nbsp; Profil </a>
+            <a href=""><i class="fas fa-search"></i>&nbsp; &nbsp; Rechercher </a>
+            <a href=""><i class="fas fa-cog"></i>&nbsp; &nbsp; Paramètres </a>
+            <a href=""><i class="fas fa-heart-broken"></i>&nbsp; &nbsp; Déconnexion</a>
+            <button class="createPost"> Créer un post </button>
+        </section>
+        <section class="middle">
+            <div class="contenu">
+                <h3>{{ utilisateur?.pseudo }}</h3>
+                <div class="infos">
+                    <h4>{{ followerCount }} <br>Abonnés</h4>
+                    <h4>{{ followingCount }} <br>Abonnements</h4>
+                    <h4>{{ postCount }} <br>Posts</h4>
+                </div>
+            </div>
+        </section>
+        <aside>
+            <div class="activeUser">
+                <div class="search">
+                    <label for="user"><i class="fas fa-search"></i></label>
+                    <input type="text" class="searchUser" placeholder="Rechercher un utilisateur...">
+                </div>
+                <!-- Liste des utilisateurs actifs -->
+            </div>
+        </aside>
+    </main>
+</body>
+
