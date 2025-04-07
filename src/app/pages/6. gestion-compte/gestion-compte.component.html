@@ -14,31 +14,110 @@
     </header>
     <main>
         <section class="left">
-            <a href=""><i class="fas fa-home"></i>&nbsp; &nbsp; Accueil </a>
-            <a href=""><i class="fas fa-comments"></i>&nbsp; &nbsp; Session </a>
-            <a href="" class="grass"><i class="fas fa-user"></i>&nbsp; &nbsp; Profil </a>
-            <a href=""><i class="fas fa-search"></i>&nbsp; &nbsp; Rechercher </a>
-            <a href=""><i class="fas fa-cog"></i>&nbsp; &nbsp; Paramètres </a>
-            <a href=""><i class="fas fa-heart-broken"></i>&nbsp; &nbsp; Déconnexion</a>
+            <h2  (click)="pageAccueil()"><i class="fas fa-home"></i>&nbsp; &nbsp; Accueil </h2>
+            <h2  (click)="pageSession()"><i class="fas fa-comments"></i>&nbsp; &nbsp; Session </h2>
+            <h2 id="grass" (click)="pageProfil()"><i class="fas fa-user"></i>&nbsp; &nbsp; Profil </h2>
+            <h2  (click)="pageSearch()"><i class="fas fa-search"></i>&nbsp; &nbsp; Rechercher </h2>
+            <h2  (click)="pageSetting()"><i class="fas fa-cog"></i>&nbsp; &nbsp; Paramètres </h2>
+            <h2  (click)="pageDeconnexion()"><i class="fas fa-heart-broken"></i>&nbsp; &nbsp; Déconnexion</h2>
             <button class="createPost"> Créer un post </button>
         </section>
         <section class="middle">
             <div class="contenu">
-                <h3>{{ utilisateur?.pseudo }}</h3>
+                <button class="edit" (click)="boutonModifyProfil()">Modifier mon profil</button>
+                <div class="userI">
+                    <img [src]="utilisateur?.avatar" [alt]="utilisateur?.pseudo" class="avatar" >
+                    <h3>{{ utilisateur?.pseudo }}</h3>
+                </div>
                 <div class="infos">
-                    <h4>{{ followerCount }} <br>Abonnés</h4>
-                    <h4>{{ followingCount }} <br>Abonnements</h4>
-                    <h4>{{ postCount }} <br>Posts</h4>
+                    <h4  (click)="boutonAbonnes()">{{ followerCount }} <br>&nbsp;&nbsp;&nbsp;Abonnés&nbsp;&nbsp;&nbsp;</h4>
+                    <h4  (click)="boutonAbonnement()">{{ followingCount }} <br>Abonnements</h4>
+                    <h4>{{ postCount }} <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Posts&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                </div>
+                <div class="post-list">
+                    <div class="post-card" *ngFor="let post of posts">
+                        <i (click)="supprimerPost(post.id)" *ngIf="post.user_id === utilisateur?.id" id="trash" class="fas fa-trash"></i>
+                        <div class="post-header">
+                            <img [src]="utilisateur?.avatar" [alt]="utilisateur?.pseudo" class="post-avatar">
+                            <h4 class="post-author">{{ utilisateur?.pseudo }}</h4>
+                            <h5 class="post-title">{{ post?.titre }}</h5>
+                        </div>
+                        <div class="post-body">
+                            <p>{{ post?.post }}</p>
+                            <p>{{ post?.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
+                        </div>
+                        <div class="post-comments">
+                            <h5 class="post-comment-title" (click)="boutonCommentaires(post)"><i class="fas fa-sort-down"></i>&nbsp; &nbsp;Commentaires</h5>
+                            <div class="commentUser" *ngFor="let commentaire of post.commentaires">
+                                <h4> {{ commentaire?.pseudo}}</h4>
+                                <p class="comment-author">{{ commentaire?.comment }}</p>
+                                <p class="comment-date">{{ commentaire?.createdAt | date: 'dd/MM/yyyy  HH:mm'}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <section class="listeAbonnements">
+            <i (click)="boutonCroixAbonnement()" class="fas fa-times"></i>
+            <h3>Listes des Abonnements</h3>
+            <div class="listeFollowingCross">
+                <div *ngFor="let followi of following" class="followingCross-item">
+                    <img [src]="followi.utilisateur?.avatar || 'https://sbcf.fr/wp-content/uploads/2018/03/sbcf-default-avatar.png'"
+                        alt="Avatar" class="avatar-img">
+                    <div class="pseudo">
+                        {{ followi.utilisateur?.pseudo || 'Utilisateur inconnu' }}
+                    </div>
                 </div>
             </div>
         </section>
+        <section class="listeAbonnes">
+            <i (click)="boutonCroixAbonnes()" class="fas fa-times"></i>
+            <h3>Listes des Abonnés</h3>
+            <div class="listeFollowerCross">
+                <div *ngFor="let followe of follower" class="followerCross-item">
+                    <img [src]="followe.utilisateur?.avatar || 'https://sbcf.fr/wp-content/uploads/2018/03/sbcf-default-avatar.png'"
+                        alt="Avatar" class="avatar-img">
+                    <div class="pseudo">
+                        {{ followe.utilisateur?.pseudo || 'Utilisateur inconnu' }}
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="editProfil">
+            <i id='cross'class="fas fa-times" (click)="boutonCroixModifyProfil()"></i>
+            <form #loginForm="ngForm" (submit)="modifyUser()">
+                <div class="nameGroup">
+                    <h4>Nom d'utilisateur</h4>
+                    <label for="nom"><i class='fas fa-user'></i></label>
+                    <input *ngIf="utilisateur" class="form-control" id="nom" name="nom" [(ngModel)]="utilisateur.pseudo" />
+                </div>
+                <div class="avatarGroup">
+                    <h4>Avatar</h4>
+                    <input *ngIf="utilisateur" class="form-control" id="image" type="file" (change)="onAvatarSelected($event)"
+                        accept="image/*">
+                </div>
+                <button type="submit" class="btnSave">
+                    Enregistrer mes informations
+                </button>
+            </form>
+        </section>
         <aside>
-            <div class="activeUser">
-                <div class="search">
+            <div class="search">
+                <div class="searchInput">
                     <label for="user"><i class="fas fa-search"></i></label>
                     <input type="text" class="searchUser" placeholder="Rechercher un utilisateur...">
                 </div>
-                <!-- Liste des utilisateurs actifs -->
+                <div class="listeFollowing" >
+                    <div *ngFor="let follow of following" class="following-item">
+                        <img [src]="follow.utilisateur?.avatar || 'https://sbcf.fr/wp-content/uploads/2018/03/sbcf-default-avatar.png'"
+                            alt="Avatar" class="avatar-img">
+                        <div class="pseudo">
+                            {{ follow.utilisateur?.pseudo || 'Utilisateur inconnu' }}
+                        </div>
+                    </div>
+                </div>
             </div>
         </aside>
     </main>

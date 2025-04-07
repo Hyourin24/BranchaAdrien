@@ -5,6 +5,7 @@ import { FilComponent } from './pages/4. fil/fil.component';
 import { SessionrpComponent } from './pages/5. sessionrp/sessionrp.component';
 import { GestionCompteComponent } from './pages/6. gestion-compte/gestion-compte.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { ParaComponent } from './pages/7. para/para.component';
 
 export const routes: Routes = [{
     path: '',
@@ -26,6 +27,9 @@ export const routes: Routes = [{
 },{
     path: "gestion",
     component: GestionCompteComponent
+},{
+    path: "setting",
+    component: ParaComponent
 },{
     path: "**",
     component: NotFoundComponent

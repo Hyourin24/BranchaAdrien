@@ -29,7 +29,28 @@ export class AuthComponent {
 
   constructor(private router: Router, private httpTestService: ApiService) { }
 
-  
+  ngOnInit() {
+    this.httpTestService.getUser().subscribe(pseudo => {
+      this.pseudoList = pseudo;
+      console.log(this.pseudoList);
+    });
+    this.httpTestService.getGods().subscribe(gods => {
+      this.godsList = gods;
+      
+      //Récupération des noms, image et description
+      console.log(this.godsList);
+      this.godsList.forEach(god => {
+        return {
+          id: god.id,
+          nom: god.nom,
+          description: god.description,
+          mythologie: god.mythologie,
+          image_url: god.image_url
+        }
+      });
+
+    });
+  }
 
   login() {
     const authBody = { pseudo: this.pseudo, password: this.password };

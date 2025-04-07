@@ -46,6 +46,8 @@ body {
     background-size: 300% 300%;
     animation: slide-in 15s infinite;
     color: #ffffff;
+    overflow: hidden;
+    position: relative;
 }
 
 /* ===== HEADER ===== */
@@ -79,20 +81,21 @@ main {
     align-items: flex-start;
 }
 
-.left a {
+.left h2 {
     color: #ddd;
     cursor: pointer;
     margin-left: 15%;
     text-decoration: none;
     font-size: 1.5rem;
+    font-weight: 400;
 }
 
-.left a:hover {
+.left h2:hover {
     font-weight: 700;
 
 }
 
-.grass {
+#grass {
     font-weight: 700;
 }
 
@@ -118,7 +121,40 @@ main {
 
 .middle {
     background-color: #1b1d1b;
+    overflow-y: auto;
 }
+.middle::-webkit-scrollbar {
+    width: 8px;
+}
+
+.middle::-webkit-scrollbar-track {
+    background: #1b1d1b;
+}
+
+.middle::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.middle::-webkit-scrollbar-thumb:hover {
+    background: #444;
+}
+
+.edit {
+    display: flex;
+    flex-direction: column;
+    color: #ffffff;
+    padding: 10px;
+    margin-top: 20px;
+    margin-left: 75%;
+    margin-right: 10%;
+    border-radius: 12px;
+    border: 1px solid #444;
+    background-color: #2a2d2a;
+    cursor: pointer;
+}
+
+
 
 
 
@@ -129,7 +165,7 @@ aside {
     border-left: 1px solid #828282;
 }
 
-.activeUser h2 {
+.search h2 {
     font-size: 16px;
     margin-bottom: 10px;
 }
@@ -137,10 +173,14 @@ aside {
 .search {
     flex: 1;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     padding: 5px 10px;
     border-radius: 10px;
     max-width: 400px;
+}
+
+.searchInput {
+    display: flex;
 }
 
 .search i {
@@ -157,11 +197,30 @@ aside {
     color: #ffffff;
 }
 
-/* --------------------------- CONTENU BACK ------------------------------  */
+/* --------------------------- Post ------------------------------  */
 
-.contenu h3 {
-    margin-left: 49%;
-    margin-top: 10rem;
+
+.userI {
+    margin-top: 40px;
+    display: flex;
+    margin-left: 45%;
+    flex-direction: column;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-size: 200%;
+    background-repeat: no-repeat;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+    border: 1px solid #dedddd;
+}
+
+.userI h3 {
+    margin-top: 20px;
+    margin-left: 30px;
 }
 
 .infos {
@@ -171,3 +230,250 @@ aside {
     margin-top: 20px;
     text-align: center;
 }
+
+.infos h4 {
+    background-color: #2a2d2a;
+    border: 1px solid #444;
+    border-radius: 12px;
+    padding: 15px;
+    cursor: pointer;
+}
+
+.post-list {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.post-card {
+    background-color: #2a2d2a;
+    border: 1px solid #444;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+#trash {
+    color: #ffffff;
+    margin-left: 97%;
+    cursor: pointer;
+}
+
+.post-header {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #555;
+    padding-bottom: 0.5rem;
+}
+
+.post-author {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #80ffd3;
+    margin-bottom: 0.2rem;
+}
+
+.post-title {
+    font-size: 1.3rem;
+    color: #ffffff;
+    margin: 0;
+}
+
+.post-body {
+    padding-top: 0.5rem;
+}
+
+.post-body p {
+    font-size: 1rem;
+    color: #dddddd;
+    line-height: 1.5;
+}
+
+.post-avatar {
+    height: 40px;
+    width: 40px;
+    border-radius: 100px;
+}
+
+.listeFollowing {
+    margin-top: 10px;
+}
+.following-item {
+    display: flex;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    cursor: pointer;
+}
+
+.following-item:hover {
+    background-color: #2a2d2a;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.following-item img {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.post-comment-title {
+    font-size: 1rem;
+    color: #80ffd3;
+    margin-bottom: 10px;
+    margin-top: 40px;
+    padding: 15px;
+    font-weight: lighter;
+    text-align: center;
+    border-top: 1px solid #555;
+}
+.post-comment-title:hover {
+    background-color: #1a1b1a;
+    border-radius: 5px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+.commentUser {
+    display: none;
+    flex-direction: column;
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #444;
+}
+.commentUser h4 {
+    color: #80ffd3;
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.commentUser p {
+    color: #dddddd;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+/* -------------------------Modification du profil---------------------------- */
+
+.editProfil {
+    position: absolute;
+    margin-left: 35%;
+    margin-top: 7%;
+    height: 400px;
+    width: 600px;
+    background-color: #323734;
+    border-radius: 50px;
+    display: none;
+}
+
+.nameGroup,
+.avatarGroup {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    border-top: 1px solid #444;
+}
+
+.nameGroup i,
+.passwordGroup i {
+    position: absolute;
+    margin-left: 17%;
+    top: 80%;
+    transform: translateY(-50%);
+    color: gray;
+}
+
+.editProfil h4 {
+    margin-top: 20px;
+    margin-left: 15%;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.editProfil input {
+    width: 70%;
+    padding: 5px;
+    color: #ffffff;
+    background-color: #1a1b1a;
+    border-radius: 30px;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-left: 15%;
+}
+
+.editProfil button {
+    font-size: 20px;
+    text-align: center;
+    margin-left: 40%;
+    color: white;
+    border: none;
+    padding: 10px;
+    background: linear-gradient(45deg, #37bd8a, #83c1b2, #34a289, #57deaa, #aeffec);
+    display: flex;
+    background-size: 300% 300%;
+    animation: slide-in 15s infinite;
+    cursor: pointer;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* -------------------------Liste des abonnés--------------------------------- */
+
+.listeAbonnements, .listeAbonnes{
+    margin-top: 10px;
+    position: absolute;
+    margin-left: 35%;
+    margin-top: 7%;
+    background-color: #323734;
+    height: 400px;
+    width: 600px;
+    border-radius: 50px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+    display: none;
+}
+
+.listeAbonnements i, .listeAbonnes i, #cross{
+    color: #ffffff;
+    background-color: #323734;
+    padding: 15px;
+    margin-left: 100%;
+    cursor: pointer;
+    position: absolute;
+    border-radius: 80px;
+}
+
+.listeAbonnements h3, .listeAbonnes h3{
+    text-align: center;
+    margin-top: 20px;
+    color: #ffffff;
+}
+
+.listeFollowingCross, .listeFollowerCross {
+    color: #ffffff;
+    background-color: #323734;
+    padding: 15px;
+    cursor: pointer;
+    border-radius: 80px;
+    display: flex;
+    flex-direction: column;
+}
+
+.followingCross-item, .followerCross-item {
+    display: flex;
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #444;
+}
+.followingCross-item:hover, .followerCross-item:hover{
+    background-color: #2a2d2a;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.listeFollowingCross img, .listeFollowerCross img{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+

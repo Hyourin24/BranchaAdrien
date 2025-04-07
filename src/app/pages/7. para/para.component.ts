@@ -3,32 +3,26 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
-import { Follower } from '../../modules/Follower';
-import { Utilisateur } from '../../modules/User';
 
 @Component({
-  selector: 'app-accueil',
-  imports: [CommonModule, FormsModule],
-  templateUrl: './accueil.component.html',
-  styleUrl: './accueil.component.css'
+  selector: 'app-para',
+  imports: [FormsModule, CommonModule],
+  templateUrl: './para.component.html',
+  styleUrl: './para.component.css'
 })
-export class AccueilComponent {
-
-  follower: string = "";
-  followersList: Follower[] = [];
-  pseudo: string = "";
-  password: string = "";
+export class ParaComponent {
 
   constructor (private router: Router, private httpTestService: ApiService) { }
-
-  ngOnInit() {
-    const token = localStorage.getItem("token");
-
-    this.httpTestService.getFollowing().subscribe(followers => {
-      this.followersList = followers;
-      console.log(this.followersList);
-    })
-  }
+      
+      ngOnInit() {
+        const token = localStorage.getItem("token");
+    
+        if (!token) {
+          this.router.navigate(['/connexion']);
+          return;
+        }
+      }
+   
 
   pageAccueil() {
     this.router.navigate(['/accueil']);

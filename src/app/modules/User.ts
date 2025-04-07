@@ -1,6 +1,7 @@
 export interface Utilisateur {
   id?: number;
   god_id: number;
+  avatar?: string;
   pseudo: string;
   email: string;
   actif: 'Actif' | 'Banni';

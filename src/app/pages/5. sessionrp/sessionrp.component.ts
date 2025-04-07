@@ -21,5 +21,30 @@ export class SessionrpComponent {
         return;
       }
     }
+    pageAccueil() {
+    this.router.navigate(['/accueil']);
+  }
+
+  pageSession() {
+    this.router.navigate(['/session']);
+  }
+
+  pageProfil() {
+    this.router.navigate(['/gestion']);
+  }
+
+  pageSearch() {
+    this.router.navigate(['/fil']);
+  }
+
+  pageSetting() {
+    this.router.navigate(['/setting']);
+  }
+
+  pageDeconnexion() {
+    this.router.navigate(['/connexion']);
+    this.httpTestService.deleteToken()
+
+  }
 
 }

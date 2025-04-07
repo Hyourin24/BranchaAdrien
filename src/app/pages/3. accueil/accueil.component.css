@@ -43,9 +43,10 @@
 
 body {
     background: #323734;
-        background-size: 300% 300%;
-        animation: slide-in 15s infinite;
+    background-size: 300% 300%;
+    animation: slide-in 15s infinite;
     color: #ffffff;
+    overflow: hidden;
 }
 
 /* ===== HEADER ===== */
@@ -79,18 +80,19 @@ main {
     align-items: flex-start;
 }
 
-.left a {
+.left h2 {
     color: #ddd;
     cursor: pointer;
     margin-left: 15%;
     text-decoration: none;
     font-size: 1.5rem;
+    font-weight: 400;
 }
-.left a:hover {
+.left h2:hover {
     font-weight: 700;
 
 }
-.left a:first-child {
+.left h2:first-child {
     font-weight: 700;
 }
 
