@@ -19,21 +19,66 @@
             <h2 href="" (click)="pageSearch()"><i class="fas fa-search"></i>&nbsp; &nbsp; Rechercher </h2>
             <h2 href="" (click)="pageSetting()"><i class="fas fa-cog"></i>&nbsp; &nbsp; Paramètres </h2>
             <h2 href="" (click)="pageDeconnexion()"><i class="fas fa-heart-broken"></i>&nbsp; &nbsp; Déconnexion</h2>
-            <button class="createPost"> Créer un post </button>
+            <button (click)="boutonCreatePost()"> Créer un post </button>
         </section>
         <section class="middle">
             <div class="abonnement"></div>
             <div class="postList">
-                <!-- List des posts ici -->
+                <div class="post-card" *ngFor="let post of posts">
+                    <div class="post-header">
+                        <div class="post-header">
+                            <img [src]="post.utilisateur?.avatar" [alt]="utilisateur?.pseudo" class="post-avatar">
+                            <h4 class="post-author">{{ post.utilisateur?.pseudo }}</h4>
+                            <h5 class="post-title">{{ post?.titre }}</h5>
+                        </div>
+                        <div class="post-body">
+                            <p>{{ post?.post }}</p>
+                            <p>{{ post?.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
+                        </div>
+                        <div class="post-comments">
+                            <h5 class="post-comment-title"><i class="fas fa-sort-down"></i>&nbsp;
+                                &nbsp;Commentaires</h5>
+                            <div class="commentUser" *ngFor="let commentaire of post.commentaires">
+                                <h4> {{ commentaire?.pseudo}}</h4>
+                                <p class="comment-author">{{ commentaire?.comment }}</p>
+                                <p class="comment-date">{{ commentaire?.createdAt | date: 'dd/MM/yyyy HH:mm'}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
+        <section class="createPost">
+            <i id='cross' class="fas fa-times" (click)="boutonCroixPost()"></i>
+            <form #loginForm = 'ngForm' (submit)="createPost()">
+                <div class="titre">
+                    <h4>Titre du post</h4>
+                    <label for="titrePost"></label>
+                    <input  type="text" class="titrePost" id="titrePost" name="titre" placeholder="Titre du post" [(ngModel)]="nouveauPost.titre">
+                </div>
+                <div class="description">
+                    <h4>Description du post</h4>
+                    <label for="descriptionPost"></label>
+                    <textarea type="text" class="descriptionPost" id="descriptionPost" name="post" placeholder="Description du post" [(ngModel)]="nouveauPost.post"></textarea>
+                </div>
+                <button type="submit" class="btnPost">Créer mon post</button>
+            </form>
+        </section>
         <aside>
-            <div class="activeUser">
-                <div class="search">
+            <div class="search">
+                <div class="searchInput">
                     <label for="user"><i class="fas fa-search"></i></label>
                     <input type="text" class="searchUser" placeholder="Rechercher un utilisateur...">
                 </div>
-                <!-- Liste des utilisateurs actifs -->
+                <div class="listeFollowing">
+                    <div *ngFor="let follow of following" class="following-item">
+                        <img [src]="follow.utilisateur?.avatar || 'https://sbcf.fr/wp-content/uploads/2018/03/sbcf-default-avatar.png'"
+                            alt="Avatar" class="avatar-img">
+                        <div class="pseudo">
+                            {{ follow.utilisateur?.pseudo || 'Utilisateur inconnu' }}
+                        </div>
+                    </div>
+                </div>
             </div>
         </aside>
     </main>

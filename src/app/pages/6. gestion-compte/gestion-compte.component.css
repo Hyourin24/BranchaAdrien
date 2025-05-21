@@ -99,7 +99,7 @@ main {
     font-weight: 700;
 }
 
-.createPost {
+.left button {
     background-color: #ffffff;
     color: #323734;
     padding: 10px 20px;
@@ -111,7 +111,7 @@ main {
     cursor: pointer;
 }
 
-.createPost:hover {
+.left button:hover {
     background-color: #323734;
     color: #ffffff;
     transition: 0.3s;
@@ -197,6 +197,30 @@ aside {
     color: #ffffff;
 }
 
+.listeFollowing {
+    margin-top: 10px;
+}
+
+.following-item {
+    display: flex;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    cursor: pointer;
+}
+
+.following-item:hover {
+    background-color: #2a2d2a;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.following-item img {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
 /* --------------------------- Post ------------------------------  */
 
 
@@ -254,9 +278,11 @@ aside {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-#trash {
+.settingPost {
+    display: flex;
+    gap: 20px;
     color: #ffffff;
-    margin-left: 97%;
+    margin-left: 95%;
     cursor: pointer;
 }
 
@@ -295,28 +321,6 @@ aside {
     border-radius: 100px;
 }
 
-.listeFollowing {
-    margin-top: 10px;
-}
-.following-item {
-    display: flex;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    cursor: pointer;
-}
-
-.following-item:hover {
-    background-color: #2a2d2a;
-    border-radius: 5px;
-    transition: 0.3s;
-}
-
-.following-item img {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    margin-right: 10px;
-}
 
 .post-comment-title {
     font-size: 1rem;
@@ -335,7 +339,6 @@ aside {
     cursor: pointer;
 }
 .commentUser {
-    display: none;
     flex-direction: column;
     padding: 10px;
     cursor: pointer;
@@ -353,7 +356,26 @@ aside {
     line-height: 1.5;
 }
 /* -------------------------Modification du profil---------------------------- */
-
+.modifyPost{
+    position: absolute;
+    margin-left: 5%;
+    margin-top: -45%;
+    height: 600px;
+    width: 600px;
+    background-color: #323734;
+    border-radius: 50px;
+    display: none;
+}
+.createPost {
+    position: absolute;
+    margin-left: 35%;
+    margin-top: 2% ;
+    height: 600px;
+    width: 600px;
+    background-color: #323734;
+    border-radius: 50px;
+    display: none;
+}
 .editProfil {
     position: absolute;
     margin-left: 35%;
@@ -366,7 +388,9 @@ aside {
 }
 
 .nameGroup,
-.avatarGroup {
+.avatarGroup,
+.titre,
+.description {
     margin-top: 40px;
     margin-bottom: 40px;
     position: relative;
@@ -384,7 +408,7 @@ aside {
     color: gray;
 }
 
-.editProfil h4 {
+.editProfil h4, .modifyPost h4, .createPost h4{
     margin-top: 20px;
     margin-left: 15%;
     font-weight: 500;
@@ -402,7 +426,7 @@ aside {
     margin-left: 15%;
 }
 
-.editProfil button {
+.editProfil button, .modifyPost button, .createPost button{
     font-size: 20px;
     text-align: center;
     margin-left: 40%;
@@ -416,6 +440,31 @@ aside {
     cursor: pointer;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
 }
+
+.descriptionPost {
+    padding: 15px;
+    width: 70%;
+    height: 200px;
+    color: #ffffff;
+    background-color: #1a1b1a;
+    border-radius: 10px;
+    font-size: 16px;
+    margin-left: 15%;
+    resize: none;
+    border: 1px solid #444;
+}
+
+.titrePost {
+    width: 70%;
+    padding: 5px;
+    color: #ffffff;
+    background-color: #1a1b1a;
+    border-radius: 30px;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-left: 15%;
+}
+
 
 /* -------------------------Liste des abonnés--------------------------------- */
 

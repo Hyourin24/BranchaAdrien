@@ -21,6 +21,9 @@ export const routes: Routes = [{
 },{
     path: "fil",
     component: FilComponent
+}, { 
+    path: 'fil/:id', 
+    component: FilComponent 
 },{
     path: "session",
     component: SessionrpComponent

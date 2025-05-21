@@ -22,19 +22,81 @@
             <h2 (click)="pageDeconnexion()"><i class="fas fa-heart-broken"></i>&nbsp; &nbsp; Déconnexion</h2>
             <button class="createPost"> Créer un post </button>
         </section>
-        <section class="middle">
-            <div class="abonnement"></div>
-            <div class="postList">
-                <!-- List des posts ici -->
+        <section class="middle" >
+            <div class="contenu" *ngIf="!idClick">
+                <h3>Rechercher des utilisateurs</h3>
+                <div class="globalSearchInput">
+                    <input type="text" [(ngModel)]="recherche" (input)="rechercheResult()" placeholder="Pseudo..."
+                        class="globalUserSearch">
+                    <button class="globalSearchBtn" (click)="rechercheResult()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            
+                <div class="globalUserResults">
+                    <div *ngFor="let utilisateur of resultatsFiltres" class="user-card">
+                        <img [src]="utilisateur.avatar || 'https://sbcf.fr/wp-content/uploads/2018/03/sbcf-default-avatar.png'"
+                            alt="Avatar" class="user-avatar">
+                        <p class="user-name">{{ utilisateur.pseudo }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="contenuClick" *ngIf="idClick">
+                <div class="contenu">
+                    <div class="userI">
+                        <img [src]="utilisateurClicke?.avatar" [alt]="utilisateur?.pseudo" class="avatar">
+                        <h3>{{ utilisateurClicke?.pseudo }}</h3>
+                    </div>
+                    <div class="infos">
+                        <h4 (click)="boutonAbonnes()">{{ followerCount }} <br>&nbsp;&nbsp;&nbsp;Abonnés&nbsp;&nbsp;&nbsp;</h4>
+                        <h4 (click)="boutonAbonnement()">{{ followingCount }} <br>Abonnements</h4>
+                        <h4>{{ postCount }} <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Posts&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                    </div>
+                    <div class="post-list">
+                        <div class="post-card" *ngFor="let post of posts">
+                            <div class="post-header">
+                                <img [src]="utilisateurClicke?.avatar" [alt]="utilisateur?.pseudo" class="post-avatar">
+                                <h4 class="post-author">{{ utilisateurClicke?.pseudo }}</h4>
+                                <h5 class="post-title">{{ post?.titre }}</h5>
+                            </div>
+                            <div class="post-body">
+                                <p>{{ post?.post }}</p>
+                                <p>{{ post?.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
+                            </div>
+                            <div class="post-comments">
+                                <h5 class="post-comment-title" (click)="afficherCommentaire(post)"><i
+                                        class="fas fa-sort-down"></i>&nbsp; &nbsp;Commentaires</h5>
+                                <div *ngIf="post.isCommentsVisible">
+                                    <div class="commentUser" *ngFor="let commentaire of post.commentaires">
+                                        <h4> {{ commentaire?.pseudo}}</h4>
+                                        <p class="comment-author">{{ commentaire?.comment }}</p>
+                                        <p class="comment-date">{{ commentaire?.createdAt | date: 'dd/MM/yyyy HH:mm'}}</p>
+                                        <div *ngIf="!commentaire">
+                                            <p>Aucun commentaire</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
         <aside>
-            <div class="activeUser">
-                <div class="search">
+            <div class="search">
+                <div class="searchInput">
                     <label for="user"><i class="fas fa-search"></i></label>
                     <input type="text" class="searchUser" placeholder="Rechercher un utilisateur...">
                 </div>
-                <!-- Liste des utilisateurs actifs -->
+                <div class="listeFollowing">
+                    <div *ngFor="let follow of following" class="following-item">
+                        <img [src]="follow.utilisateur?.avatar || 'https://sbcf.fr/wp-content/uploads/2018/03/sbcf-default-avatar.png'"
+                            alt="Avatar" class="avatar-img">
+                        <div class="pseudo">
+                            {{ follow.utilisateur?.pseudo || 'Utilisateur inconnu' }}
+                        </div>
+                    </div>
+                </div>
             </div>
         </aside>
     </main>

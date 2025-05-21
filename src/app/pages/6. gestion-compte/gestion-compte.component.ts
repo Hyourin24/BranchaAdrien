@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { Utilisateur } from '../../modules/User';
 import { forkJoin } from 'rxjs';
 import { Follower } from '../../modules/Follower';
-import { Posts } from '../../modules/Posts';
+
 @Component({
   selector: 'app-gestion-compte',
   imports: [CommonModule, FormsModule],
@@ -17,30 +17,52 @@ export class GestionCompteComponent {
   constructor (private router: Router, private httpTestService: ApiService) { }
   
   //Création des paramètres en fonction des models
+  nouveauPost: { titre: string, post: string } = { titre: '', post: '' };
+
   pseudo: Utilisateur[] = []
   email: string = "";
   password: string = "";
   pseudoList: Utilisateur[] = [];
 
-  utilisateur: Utilisateur | null = null;
+  utilisateur: Utilisateur | undefined
   follower: any[] = [];
   followerCount: any [] = [];
   following: any[] = [];
   followingCount: number = 0
   followingUser: Follower | null = null;
   posts: any[] = []; 
+  comment: any[] = [];
   postCount: number = 0
     
   ngOnInit() {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      this.router.navigate(['/connexion']);
-    }
-    // Récupérer l'utilisateur connecté
-    this.httpTestService.getMe().subscribe(utilisateur => {
-      this.utilisateur = utilisateur
-      console.log("Utilisateur connecté :", this.utilisateur);
+  const token = localStorage.getItem("token");
+  if (!token) {
+    this.router.navigate(['/connexion']);
+    return;
+  }
+
+  // Récupérer l'utilisateur connecté
+  this.httpTestService.getMe().subscribe(utilisateur => {
+    this.utilisateur = utilisateur;
+    console.log("Utilisateur connecté :", this.utilisateur);
+
+    // Maintenant que this.utilisateur.id est bien défini, on peut appeler forkJoin
+    forkJoin({
+      postsJoin: this.httpTestService.getPostsByUser(this.utilisateur?.id),
+      usersJoin: this.httpTestService.getUser()
+    }).subscribe(({ postsJoin, usersJoin }) => {
+      this.posts = postsJoin;
+      this.pseudo = usersJoin;
+      this.postCount = this.posts.length;
+
+      this.posts = this.posts.map(p => ({
+        ...p,
+        isCommentsVisible: false,
+      }));
+      console.log("Liste posts enrichis", this.posts);
     });
+  });
+
     // Récupérer la liste des abonnements
     this.httpTestService.getFollowing().subscribe(following => {
       this.following = following;
@@ -52,13 +74,6 @@ export class GestionCompteComponent {
       this.followerCount = follower.length;
       console.log("Liste abonnés", this.follower)
       console.log("Nombre abonnés:", this.followerCount)
-    })
-    // Récupérer la liste des posts
-    this.httpTestService.getPostsMe().subscribe(posts => {
-      this.posts = posts
-      this.postCount = posts.length;
-      console.log("Liste post", this.posts)
-      console.log("Nombre posts:", this.postCount)
     })
     // Joindre les id des utilisateurs avec les user_id des abonnements
     forkJoin({
@@ -93,27 +108,6 @@ export class GestionCompteComponent {
       console.log("Liste abonnés enrichiis", this.follower);
     });
     //Joindre les id des utilisateurs avec les user_id des posts
-    forkJoin({
-      postsJoin: this.httpTestService.getPostsMe(),
-      usersJoin: this.httpTestService.getUser()
-    }).subscribe(({ postsJoin, usersJoin }) => {
-      this.posts = postsJoin;
-      this.pseudo = usersJoin;
-      this.posts = this.posts.map(p => {
-        return {
-          ...p,
-          isCommentsVisible: false,
-          commentaires: p.commentaires.map((c: { user_id: number | undefined; }) => {
-            const user = this.pseudo.find(u => u.id === c.user_id);
-            return {
-              ...c,
-              pseudo: user?.pseudo || 'Utilisateur inconnu'
-            };
-          })
-        };
-      });
-      console.log("Liste posts enrichis", this.posts);
-    });
   }
 
   // -------------------------------------------------------------------------------------------------------------------------------------------
@@ -164,15 +158,110 @@ export class GestionCompteComponent {
       }
     });
   }
-  supprimerPost(post_id: any) {
-  if (confirm('Es-tu sûr de vouloir supprimer ce post ?')) {
-    this.httpTestService.deletePost(post_id).subscribe(() => {
-      window.location.reload();
+  // Récupérer les posts des users
+
+  getPostsByUser(user_id: any) {
+    this.httpTestService.getPostsByUser(user_id).subscribe(posts => {
+      this.posts = posts;
+      console.log("Posts de l'utilisateur :", this.posts);
     });
   }
-}
+
+
+  afficherCommentaire(post: any) {
+    this.httpTestService.getCommentsByPost(post.id).subscribe(comments => {
+      post.commentaires = comments;
+
+      forkJoin({
+        commentJoin: this.httpTestService.getCommentsByPost(post.id),
+        usersJoin: this.httpTestService.getUser()
+      }).subscribe(({ commentJoin, usersJoin }) => {
+        post.commentaires = commentJoin.map((c: any) => {
+          const user = usersJoin.find((u: any) => u.id === c.user_id);
+          return {
+            ...c,
+            pseudo: user?.pseudo || 'Commentaire inconnu'
+          };
+        });
+      post.isCommentsVisible = !post.isCommentsVisible;
+      console.log("Commentaires :", post.commentaires);
+      })
+    }
+  )}
+  supprimerPost(post_id: any) {
+    if (confirm('Es-tu sûr de vouloir supprimer ce post ?')) {
+      this.httpTestService.deletePost(post_id).subscribe(() => {
+        window.location.reload();
+      });
+    }
+  }
+  modifyPost(post_id: any) {
+    const modifyBody = {
+      titre: this.nouveauPost.titre, // 🧠 Nouveau texte tapé
+      post: this.nouveauPost.post
+    };
+
+    this.httpTestService.modifyPost(post_id, modifyBody).subscribe({
+      next: (response) => {
+        console.log("Modification réussie :", response);
+        window.location.reload();
+      },
+      error: (error) => {
+        console.error("Erreur modification :", error);
+      }
+    });
+  }
+  createPost() {
+     const postBody = {
+      titre: this.nouveauPost.titre, 
+      post: this.nouveauPost.post
+    };
+    this.httpTestService.createPost(postBody).subscribe({
+      next: (response) => {
+        console.log("Post créé :", response);
+        this.nouveauPost.titre = '';
+        this.nouveauPost.post = '';
+        console.log("Data envoyée :", this.nouveauPost);
+        window.location.reload();
+      },
+      error: (error) => {
+        console.error("Erreur création :", error);
+        alert("Le titre et la description du post sont requis.");
+      }
+    });
+  }
+  
+  ouvrirProfil(id: number) {
+    this.router.navigate(['/fil', id]);
+    if (id === undefined) {
+      console.error("L'ID de l'utilisateur est indéfini.");
+    }
+  }
+
+  boutonCreatePost() {
+    const post = document.querySelector('.createPost') as HTMLElement;
+    post.style.display = 'block';
+  }
+
+  boutonCroixPost() {
+    const post = document.querySelector('.createPost') as HTMLElement;
+    post.style.display = 'none';
+  }
   
   
+  afficherModify(post_id: any) {
+    const modify = document.querySelector('.modifyPost') as HTMLElement;
+    modify.style.display = 'block';
+    const post = this.posts.find(p => p.id === post_id);
+    if (post) {
+      this.nouveauPost.titre = post.titre;
+      this.nouveauPost.post = post.post;
+    }
+  }
+  boutonCroixModify() {
+    const modify = document.querySelector('.modifyPost') as HTMLElement;
+    modify.style.display = 'none';
+  }
   
   boutonModifyProfil() {
     const edit = document.querySelector('.editProfil') as HTMLElement;

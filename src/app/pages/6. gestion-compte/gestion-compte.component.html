@@ -20,7 +20,7 @@
             <h2  (click)="pageSearch()"><i class="fas fa-search"></i>&nbsp; &nbsp; Rechercher </h2>
             <h2  (click)="pageSetting()"><i class="fas fa-cog"></i>&nbsp; &nbsp; Paramètres </h2>
             <h2  (click)="pageDeconnexion()"><i class="fas fa-heart-broken"></i>&nbsp; &nbsp; Déconnexion</h2>
-            <button class="createPost"> Créer un post </button>
+            <button (click)="boutonCreatePost()"> Créer un post </button>
         </section>
         <section class="middle">
             <div class="contenu">
@@ -36,7 +36,10 @@
                 </div>
                 <div class="post-list">
                     <div class="post-card" *ngFor="let post of posts">
-                        <i (click)="supprimerPost(post.id)" *ngIf="post.user_id === utilisateur?.id" id="trash" class="fas fa-trash"></i>
+                        <div class="settingPost">
+                            <i (click)="supprimerPost(post.id)" *ngIf="post.user_id === utilisateur?.id" id="trash" class="fas fa-trash"></i>
+                            <i (click)="afficherModify(post.id)" class="fas fa-cog"></i>
+                        </div>
                         <div class="post-header">
                             <img [src]="utilisateur?.avatar" [alt]="utilisateur?.pseudo" class="post-avatar">
                             <h4 class="post-author">{{ utilisateur?.pseudo }}</h4>
@@ -47,14 +50,39 @@
                             <p>{{ post?.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
                         </div>
                         <div class="post-comments">
-                            <h5 class="post-comment-title" (click)="boutonCommentaires(post)"><i class="fas fa-sort-down"></i>&nbsp; &nbsp;Commentaires</h5>
+                            <h5 class="post-comment-title" (click)="afficherCommentaire(post)"><i class="fas fa-sort-down"></i>&nbsp; &nbsp;Commentaires</h5>
+                            <div *ngIf="post.isCommentsVisible">
                             <div class="commentUser" *ngFor="let commentaire of post.commentaires">
                                 <h4> {{ commentaire?.pseudo}}</h4>
                                 <p class="comment-author">{{ commentaire?.comment }}</p>
                                 <p class="comment-date">{{ commentaire?.createdAt | date: 'dd/MM/yyyy  HH:mm'}}</p>
+                                <div *ngIf="!commentaire">
+                                    <p>Aucun commentaire</p>
+                                </div>
+                            </div>
                             </div>
                         </div>
+                        <div class="modifyPost">
+                            <i (click)="boutonCroixModify()" id='cross' class="fas fa-times"></i> 
+                            <form #loginForm='ngForm' (submit)="modifyPost(post.id)">
+                                <div class="titre">
+                                    <h4>Titre du post</h4>
+                                    <label for="titrePost"></label>
+                                    <input type="text" class="titrePost" id="titrePost" name="titre" placeholder="Titre du post"
+                                        [(ngModel)]="nouveauPost.titre">
+                                </div>
+                                <div class="description">
+                                    <h4>Description du post</h4>
+                                    <label for="descriptionPost"></label>
+                                    <textarea type="text" class="descriptionPost" id="descriptionPost" name="post"
+                                        placeholder="Description du post" [(ngModel)]="nouveauPost.post">
+                                    </textarea>
+                                </div>
+                                <button type="submit" class="btnPost">Modifier mon post</button>
+                            </form>
+                        </div>
                     </div>
+                    
                 </div>
 
             </div>
@@ -85,6 +113,24 @@
                 </div>
             </div>
         </section>
+        <section class="createPost">
+            <i id='cross' class="fas fa-times" (click)="boutonCroixPost()"></i>
+            <form #loginForm='ngForm' (submit)="createPost()">
+                <div class="titre">
+                    <h4>Titre du post</h4>
+                    <label for="titrePost"></label>
+                    <input type="text" class="titrePost" id="titrePost" name="titre" placeholder="Titre du post"
+                        [(ngModel)]="nouveauPost.titre">
+                </div>
+                <div class="description">
+                    <h4>Description du post</h4>
+                    <label for="descriptionPost"></label>
+                    <textarea type="text" class="descriptionPost" id="descriptionPost" name="post"
+                        placeholder="Description du post" [(ngModel)]="nouveauPost.post"></textarea>
+                </div>
+                <button type="submit" class="btnPost">Créer mon post</button>
+            </form>
+        </section>
         <section class="editProfil">
             <i id='cross'class="fas fa-times" (click)="boutonCroixModifyProfil()"></i>
             <form #loginForm="ngForm" (submit)="modifyUser()">
@@ -113,7 +159,7 @@
                     <div *ngFor="let follow of following" class="following-item">
                         <img [src]="follow.utilisateur?.avatar || 'https://sbcf.fr/wp-content/uploads/2018/03/sbcf-default-avatar.png'"
                             alt="Avatar" class="avatar-img">
-                        <div class="pseudo">
+                        <div class="pseudo" *ngIf="follow.utilisateur?.id" (click)="ouvrirProfil(follow.utilisateur.id)">
                             {{ follow.utilisateur?.pseudo || 'Utilisateur inconnu' }}
                         </div>
                     </div>
