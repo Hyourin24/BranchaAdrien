@@ -32,23 +32,6 @@ export class AuthComponent {
   ngOnInit() {
     this.httpTestService.getUser().subscribe(pseudo => {
       this.pseudoList = pseudo;
-      console.log(this.pseudoList);
-    });
-    this.httpTestService.getGods().subscribe(gods => {
-      this.godsList = gods;
-      
-      //Récupération des noms, image et description
-      console.log(this.godsList);
-      this.godsList.forEach(god => {
-        return {
-          id: god.id,
-          nom: god.nom,
-          description: god.description,
-          mythologie: god.mythologie,
-          image_url: god.image_url
-        }
-      });
-
     });
   }
 
@@ -57,6 +40,7 @@ export class AuthComponent {
 
     this.httpTestService.connexion(authBody).subscribe({
       next: response => {
+        localStorage.setItem('user', JSON.stringify(response.user));
         localStorage.setItem('token', response.token); 
         this.router.navigate(['/accueil']);
       },
@@ -66,29 +50,7 @@ export class AuthComponent {
     });
   }
 
-  selectedGod: God | null = null;
-
-  selectGod(god: God): void {
-    this.selectedGod = god;
-  }
-
-  inscription () {
-    const inscriptionBody = { pseudo: this.pseudo, email: this.email, password: this.password, god_id: this.selectedGod?.id };
-    console.log("Body envoyé :", inscriptionBody);
-
-    this.httpTestService.inscription(inscriptionBody).subscribe({
-      next: response => {
-        console.log("DEBUG - Réponse du backend :", response);
-      },
-      error: (err) => {
-        if (!this.pseudo || !this.email || !this.password || !this.selectedGod?.id) {
-          alert("Veuillez remplir tous les champs et choisir un dieu.");
-        return;
-}
-      }
-    });
-    
-  }
+  
 
   // --------------------------------------------------------------------------------------------------------------------------
   // --------------------------------------------------------------------------------------------------------------------------
@@ -112,61 +74,7 @@ export class AuthComponent {
     }
   }
 
-  buttonChoix() {
-    const choixDieux = document.querySelector('.choix') as HTMLElement;
-    const inscription = document.querySelector('.inscription') as HTMLElement;
-    const tri = document.querySelector('.tri') as HTMLElement;
-
-    if (inscription) {
-        inscription.style.display = 'none'; // Cache la connexion immédiatement
-    }
-
-    if (inscription) {
-      choixDieux.style.display = 'block';
-      tri.classList.add('none');
-      setTimeout(() => {
-          choixDieux.style.opacity = '1';
-          choixDieux.classList.add('show');
-      }, 10); 
-    }
-  }
-
-  boutonTri() {
-    const buttonFiltre = document.querySelector('.buttonFiltre') as HTMLElement;
-    const tri = document.querySelector('.tri') as HTMLElement;
-    if (buttonFiltre) {
-        tri.classList.toggle('none'); // Cache la connexion immédiatement
-    }
-  }
-
-  boutonFormulaireInscription() {
-    const form = document.querySelector('.formulaireInscription') as HTMLElement;
-    const choixDieux = document.querySelector('.choix') as HTMLElement;
-    
-    if (choixDieux) {
-        choixDieux.style.display = 'none'; // Cache la connexion immédiatement
-    }
-
-    if (choixDieux) {
-      form.style.display = 'block';
-      console.log(this.selectedGod)
-      }
-    }
-
-  boutonFinalisation() {
-    const form = document.querySelector('.formulaireInscription') as HTMLElement;
-    const finalisation = document.querySelector('.finalisation') as HTMLElement;
-
-    if (form) {
-        form.style.display = 'none'; // Cache la connexion immédiatement
-    }
-
-    if (form) {
-      finalisation.style.display = 'block';
-      setTimeout(() => {
-          finalisation.style.opacity = '1';
-          finalisation.classList.add('show');
-      }, 10); 
-    }
+  clickInscription() {
+    this.router.navigate(['/inscription']);
   }
 }

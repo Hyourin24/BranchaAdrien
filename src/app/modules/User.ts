@@ -1,5 +1,5 @@
 export interface Utilisateur {
-  id?: number;
+  id?: any;
   god_id: number;
   avatar?: string;
   pseudo: string;

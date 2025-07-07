@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { Utilisateur } from '../../modules/User';
 import { forkJoin } from 'rxjs';
 import { Follower } from '../../modules/Follower';
+import { Posts } from '../../modules/Posts';
 
 @Component({
   selector: 'app-gestion-compte',
@@ -18,6 +19,7 @@ export class GestionCompteComponent {
   
   //Création des paramètres en fonction des models
   nouveauPost: { titre: string, post: string } = { titre: '', post: '' };
+  post: Posts | undefined;
 
   pseudo: Utilisateur[] = []
   email: string = "";
@@ -31,10 +33,15 @@ export class GestionCompteComponent {
   followingCount: number = 0
   followingUser: Follower | null = null;
   posts: any[] = []; 
-  comment: any[] = [];
+  comment: string = ""
   postCount: number = 0
+  postId: string = "";
+  popupVisible: boolean = false;
     
   ngOnInit() {
+  
+
+  
   const token = localStorage.getItem("token");
   if (!token) {
     this.router.navigate(['/connexion']);
@@ -58,6 +65,7 @@ export class GestionCompteComponent {
       this.posts = this.posts.map(p => ({
         ...p,
         isCommentsVisible: false,
+        commentaireTemporaire: ''
       }));
       console.log("Liste posts enrichis", this.posts);
     });
@@ -67,6 +75,8 @@ export class GestionCompteComponent {
     this.httpTestService.getFollowing().subscribe(following => {
       this.following = following;
       this.followingCount = following.length;
+      console.log("Liste abonnement", this.following)
+      console.log("Nombre abonnement:", this.followingCount)
     });
     // Récupérer la liste des abonnés
     this.httpTestService.getFollower().subscribe(follower => {
@@ -195,6 +205,19 @@ export class GestionCompteComponent {
       });
     }
   }
+  deleteComment(comment_id: any) {
+    if (confirm('Es-tu sûr de vouloir supprimer ce commentaire ?')) {
+      this.httpTestService.deleteComment(comment_id).subscribe({
+        next: (response) => {
+          console.log("Commentaire supprimé :", response);
+          window.location.reload();
+        },
+        error: (error) => {
+          console.error("Erreur suppression commentaire :", error);
+        }
+      });
+    }
+  }
   modifyPost(post_id: any) {
     const modifyBody = {
       titre: this.nouveauPost.titre, // 🧠 Nouveau texte tapé
@@ -230,9 +253,33 @@ export class GestionCompteComponent {
       }
     });
   }
+  createComment(postId: number, commentaire: string): void {
+    const commentBody = { comment: commentaire };
+  
+    this.httpTestService.postComment(postId, commentBody).subscribe({
+      next: (response) => {
+        console.log("Commentaire créé :", response, "Post ID :", postId);
+        
+        // Vider uniquement le champ de commentaire du bon post
+        this.posts = this.posts.map(p =>
+          p.id === postId
+            ? { ...p, commentaireTemporaire: '' }
+            : p
+        );
+  
+        // Optionnel : recharger les commentaires (sans reload)
+        // this.reloadCommentaires(postId); 
+      },
+      error: (error) => {
+        console.error("Erreur création commentaire :", error);
+        alert("Le commentaire est requis.");
+      }
+    });
+  }
+  
   
   ouvrirProfil(id: number) {
-    this.router.navigate(['/fil', id]);
+    this.router.navigate(['/profil', id]);
     if (id === undefined) {
       console.error("L'ID de l'utilisateur est indéfini.");
     }
@@ -241,17 +288,31 @@ export class GestionCompteComponent {
   boutonCreatePost() {
     const post = document.querySelector('.createPost') as HTMLElement;
     post.style.display = 'block';
+    this.popupVisible = true; 
   }
 
   boutonCroixPost() {
     const post = document.querySelector('.createPost') as HTMLElement;
     post.style.display = 'none';
+    this.popupVisible = false; 
+  }
+
+  boutonCreateComment() {
+    const comment = document.querySelector('.createComment') as HTMLElement;
+    comment.style.display = 'block';
+    console.log("Bouton pour créer un commentaire cliqué");
+  }
+
+  boutonCroixComment() {
+    const comment = document.querySelector('.createComment') as HTMLElement;
+    comment.style.display = 'none';
   }
   
   
   afficherModify(post_id: any) {
     const modify = document.querySelector('.modifyPost') as HTMLElement;
     modify.style.display = 'block';
+    this.popupVisible = true;
     const post = this.posts.find(p => p.id === post_id);
     if (post) {
       this.nouveauPost.titre = post.titre;
@@ -261,38 +322,42 @@ export class GestionCompteComponent {
   boutonCroixModify() {
     const modify = document.querySelector('.modifyPost') as HTMLElement;
     modify.style.display = 'none';
+    this.popupVisible = false; 
   }
   
   boutonModifyProfil() {
     const edit = document.querySelector('.editProfil') as HTMLElement;
     edit.style.display = 'block';
+    this.popupVisible = true; 
   }
   boutonCroixModifyProfil() {
     const edit = document.querySelector('.editProfil') as HTMLElement;
     edit.style.display = 'none';
-  }
-  boutonCommentaires(post: any) {
-    post.isCommentsVisible = !post.isCommentsVisible;
+    this.popupVisible = false;
   }
 
   boutonAbonnement() {
     const abonnement = document.querySelector('.listeAbonnements') as HTMLElement;
     abonnement.style.display = 'block';
+    this.popupVisible = true; 
   }
 
   boutonCroixAbonnement() {
     const abonnement = document.querySelector('.listeAbonnements') as HTMLElement;
     abonnement.style.display = 'none';
+    this.popupVisible = false; 
   }
 
   boutonAbonnes() {
     const abonnés = document.querySelector('.listeAbonnes') as HTMLElement;
     abonnés.style.display = 'block';
+    this.popupVisible = true; 
   }
 
   boutonCroixAbonnes() {
     const abonnement = document.querySelector('.listeAbonnes') as HTMLElement;
     abonnement.style.display = 'none';
+    this.popupVisible = false; 
   }
 
   pageAccueil() {

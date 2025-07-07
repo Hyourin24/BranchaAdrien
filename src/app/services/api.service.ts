@@ -5,6 +5,7 @@ import { Utilisateur } from '../modules/User';
 import { God } from '../modules/Dieux';
 import { Follower } from '../modules/Follower';
 import { Posts } from '../modules/Posts';
+import { SessionChat } from '../modules/SessionChat';
 
 @Injectable({
   providedIn: 'root'
@@ -50,8 +51,25 @@ export class ApiService {
     return this.http.get<Utilisateur[]>(`${this.api_url}/users/user/${id}`, { headers, withCredentials: true });
   }
 
+  updateActiveUser(id: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    if(!token) {
+      throw new Error('Token not found');
+    }
+    const headers = { Authorization: `Bearer ${token}` };
+    return this.http.put<Utilisateur[]>(`${this.api_url}/users/actif/${id}`, { headers, withCredentials: true });
+  }
+
   getGods(): Observable<any> {
     return this.http.get<God[]>(`${this.api_url}/god`, { withCredentials: true });
+  }
+  deleteGod(god_id: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    if(!token) {
+      throw new Error('Token not found');
+    }
+    const headers = { Authorization: `Bearer ${token}` };
+    return this.http.delete<God[]>(`${this.api_url}/god/${god_id}`, { headers, withCredentials: true }); 
   }
   
   getFollowing(): Observable<any> {
@@ -69,6 +87,12 @@ export class ApiService {
     }
     const headers = { Authorization: `Bearer ${token}` };
     return this.http.get<Follower[]>(`${this.api_url}/follow/follower`, { headers, withCredentials: true });
+  }
+  getFollowingById(id: any): Observable<any> {
+    return this.http.get<Follower[]>(`${this.api_url}/follow/following/${id}`);
+  }
+  getFollowerById(id: any): Observable<any> {
+    return this.http.get<Follower[]>(`${this.api_url}/follow/follower/${id}`);
   }
   getPostsById(id: any): Observable<any> {
     const token = localStorage.getItem('token');
@@ -93,6 +117,24 @@ export class ApiService {
     }
     const headers = { Authorization: `Bearer ${token}` };
     return this.http.get<Comment[]>(`${this.api_url}/comment/${post_id}`, { headers, withCredentials: true }); 
+  }
+  
+  postComment(post_id: any, body: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    if(!token) {
+      throw new Error('Token not found');
+    }
+    const headers = { Authorization: `Bearer ${token}` };
+    return this.http.post<Comment[]>(`${this.api_url}/comment/${post_id}`, body, { headers, withCredentials: true });
+  }
+  deleteComment(comment_id: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    if(!token) {
+      throw new Error('Token not found');
+    }
+    const headers = { Authorization: `Bearer ${token}` };
+    return this.http.delete<Comment[]>(`${this.api_url}/comment/${comment_id}`, { headers, withCredentials: true });
+  
   }
   putUser(body: any): Observable<any> {
     const token = localStorage.getItem('token');
@@ -133,6 +175,31 @@ export class ApiService {
     }
     const headers = { Authorization: `Bearer ${token}` };
     return this.http.get<Posts[]>(`${this.api_url}/post/all`, { headers, withCredentials: true }); 
+  }
+  postFollow(abonne_id: number): Observable<any> {
+    const token = localStorage.getItem('token');
+    if(!token) throw new Error('Token not found');
+    const headers = { Authorization: `Bearer ${token}` };
+    return this.http.post(`${this.api_url}/follow/${abonne_id}`, {}, { headers, withCredentials: true });
+  }
+  deleteFollow(abonne_id: number): Observable<any> {
+    const token = localStorage.getItem('token');
+    if(!token) throw new Error('Token not found');
+    const headers = { Authorization: `Bearer ${token}` };
+    return this.http.delete(`${this.api_url}/follow/${abonne_id}`, { headers, withCredentials: true });
+  }
+
+  isAlreadyFollowing(abonne_id: number): Observable<any> {
+    const token = localStorage.getItem('token');
+    if(!token) throw new Error('Token not found');
+    const headers = { Authorization: `Bearer ${token}` };
+    return this.http.get<Follower>(`${this.api_url}/follow/${abonne_id}/status`, { headers, withCredentials: true });
+  }
+  getChatSessionsUserId(): Observable<any> {
+    const token = localStorage.getItem('token');
+    if(!token) throw new Error('Token not found');
+    const headers = { Authorization: `Bearer ${token}` };
+    return this.http.get<SessionChat>(`${this.api_url}/chatSession/chat`, { headers, withCredentials: true });
   }
 
   deleteToken() {

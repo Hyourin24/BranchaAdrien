@@ -14,12 +14,12 @@
             <form #loginForm="ngForm" (submit)="login()">
                 <div class="nameGroup">
                     <h4>Nom d'utilisateur</h4>
-                    <label for="nom"><i class='fas fa-user'></i></label>
+                    <label for="nom"></label>
                     <input class="form-control" id="nom" name="nom" [(ngModel)] = "pseudo"/>
                 </div>
                 <div class="passwordGroup">
                     <h4>Mot de passe</h4>
-                    <label for="password"><i class="fas fa-lock"></i></label>
+                    <label for="password"></label>
                     <input class="form-control" type="password" id="password" name="password" [(ngModel)]="password"/>
                 </div>
                 <button type="submit" class="btn btn-primary">
@@ -33,90 +33,10 @@
 
         <!-- //////////////////////////////// -->
 
-        <section class="inscription" (click)="buttonChoix()">
+        <section class="inscription" (click)="clickInscription()">
             <h2>Personnaliser mon experience</h2>
             <a><i class="fas fa-arrow-right"></i></a>
         </section>
 
-        <!-- //////////////////////////////// -->
-
-        <section class="choix">
-        <section class="choixDieux">
-            <div class="leftPart">
-                <h2>Votre dieu:</h2>
-
-                <div *ngIf="selectedGod" class="selected-god-display">
-                    <img [src]="selectedGod.image_url" [alt]="selectedGod.nom" class="selected-god-image" />
-                    <h3>{{ selectedGod.nom }}</h3>
-                    <h4>{{ selectedGod.mythologie }}</h4>
-                    <p>{{ selectedGod.description }}</p>
-                    <button class="bouttonConfirmer" (click)="boutonFormulaireInscription()"> Confirmer </button>
-                </div>
-            </div>
-            <div class="rightPart">
-                <div class="searchBar">
-                    <div class="input">
-                        <input type="search" placeholder="          Rechercher..." class="btn-mySearch">
-                    </div>
-                    <div class="filtres">
-                        <button class="buttonFiltre" (click)="boutonTri()">Filtres</button>
-                        <br>
-                        <div class="tri">
-                            <button class="btn-trier">Trier par prix mythologie</button>
-                            <br>
-                            <button class="btn-filtrer">Trier par race</button>
-                            <br>
-                            <button class="btn-description">Trier par ordre alphabétique</button>
-                            <br>
-                        </div>
-                    </div>
-                    <div class="search">
-                        <button>SEARCH</button>
-                    </div>
-                </div>
-                <!-- //------ -->
-                <div class="godPart">
-                    <div class="god" *ngFor = "let god of godsList" (click)="selectGod(god)">
-                        <div class="god-avatar" [ngStyle]="{ 'background-image': 'url(' + god.image_url + ')' }"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        </section>
-
-        <!-- //////////////////////////////// -->
-
-        <section class="formulaireInscription">
-        <form #inscriptionForm="ngForm" (submit)="inscription()">
-            <div class="nameGroup">
-                <h4>Nom d'utilisateur</h4>
-                <label for="nom"><i class='fas fa-user'></i></label>
-                <input class="form-control" id="nom" name="nom" [(ngModel)] = "pseudo"/>
-            </div>
-            <div class="passwordGroup">
-                <h4>Mot de passe</h4>
-                <label for="password"><i class="fas fa-lock"></i></label>
-                <input class="form-control" type="password" id="password" name="password" [(ngModel)] = "password"/>
-            </div>
-            <div class="email">
-                <h4>Email</h4>
-                <label for="password"><i class="fas fa-envelope"></i></label>
-                <input class="form-control" type="email" id="email" name="email" [(ngModel)] = "email" />
-            </div>
-            <button type="submit" class="btn btn-primary" (click)="boutonFinalisation()">
-                Finaliser mon inscription
-            </button>
-        </form>
-        </section>
-
-        <!-- //////////////////////////////// -->
-
-        <section class="finalisation">
-            <h3>Votre compte a bien été crée !</h3>
-            <h5>Un mail de vérification vous a été envoyé.</h5>
-        </section>
     </main>
-    <footer>
-
-    </footer>
 </body>

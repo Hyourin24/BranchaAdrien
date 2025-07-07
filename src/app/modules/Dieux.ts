@@ -9,7 +9,7 @@ enum Mythologie {
 }
 
 export interface God {
-    id?: number;
+    id?: any;
     nom: string;
     description: string;
     mythologie: Mythologie;
@@ -17,4 +17,6 @@ export interface God {
     createdAt?: Date;
     updatedAt?: Date;
 }
+
+
 

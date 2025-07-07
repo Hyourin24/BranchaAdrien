@@ -7,28 +7,40 @@
 
     <title>Accueil</title>
 </head>
+
 <body>
     <header>
         <img src="" alt="logo" class="logo">
     </header>
     <main>
         <section class="left">
-            <h2 href="" (click)="pageAccueil()"><i class="fas fa-home"></i>&nbsp; &nbsp; Accueil </h2>
-            <h2 href="" (click)="pageSession()"><i class="fas fa-comments"></i>&nbsp; &nbsp; Session </h2>
-            <h2 href="" (click)="pageProfil()"><i class="fas fa-user"></i>&nbsp; &nbsp; Profil </h2>
-            <h2 href="" (click)="pageSearch()"><i class="fas fa-search"></i>&nbsp; &nbsp; Rechercher </h2>
-            <h2 href="" (click)="pageSetting()" *ngIf="utilisateur?.role == 'Admin'"><i class="fas fa-cog"></i>&nbsp; &nbsp; Dashboard </h2>
-            <h2 href="" (click)="pageDeconnexion()"><i class="fas fa-heart-broken"></i>&nbsp; &nbsp; Déconnexion</h2>
+            <h2 (click)="pageAccueil()"><i class="fas fa-home"></i>&nbsp; &nbsp; Accueil </h2>
+            <h2 (click)="pageSession()"><i class="fas fa-comments"></i>&nbsp; &nbsp; Session </h2>
+            <h2 (click)="pageProfil()"><i class="fas fa-user"></i>&nbsp; &nbsp; Profil </h2>
+            <h2 (click)="pageSearch()"><i class="fas fa-search"></i>&nbsp; &nbsp; Rechercher </h2>
+            <h2 href="" (click)="pageSetting()" *ngIf="utilisateur?.role == 'Admin'"><i class="fas fa-cog"></i>&nbsp; &nbsp;
+                Dashboard </h2>
+            <h2 (click)="pageDeconnexion()"><i class="fas fa-heart-broken"></i>&nbsp; &nbsp; Déconnexion</h2>
             <button (click)="boutonCreatePost()"> Créer un post </button>
         </section>
-        <section class="middle">
-            <div class="abonnement"></div>
-            <div class="postList">
-                <div class="post-card" *ngFor="let post of posts">
-                    <div class="post-header">
+        <div class="contenuClick" *ngIf="idClick">
+            <div class="contenu">
+                <div class="userI">
+                    <img [src]="utilisateurClicke?.avatar" [alt]="utilisateur?.pseudo" class="avatar">
+                    <h3>{{ utilisateurClicke?.pseudo }}</h3>
+                </div>
+                <button class="follow" *ngIf="isFollowed == false" (click)="followUser(utilisateurClicke?.id!)">S'abonner</button>
+                <button class="unfollow" *ngIf="isFollowed == true" (click)="unfollowUser(utilisateurClicke?.id!)" >Se désabonner</button>
+                <div class="infos">
+                    <h4 (click)="boutonAbonnes()">{{ followerCountId }} <br>&nbsp;&nbsp;&nbsp;Abonnés&nbsp;&nbsp;&nbsp;</h4>
+                    <h4 (click)="boutonAbonnement()">{{ followingCountId }} <br>Abonnements</h4>
+                    <h4>{{ postCount }} <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Posts&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                </div>
+                <div class="post-list">
+                    <div class="post-card" *ngFor="let post of posts">
                         <div class="post-header">
-                            <img [src]="post.utilisateur?.avatar" [alt]="post.utilisateur?.pseudo" class="post-avatar" *ngIf="post.utilisateur?.id" (click)="ouvrirProfil(post.utilisateur.id)">
-                            <h4 class="post-author">{{ post.utilisateur?.pseudo }}</h4>
+                            <img [src]="utilisateurClicke?.avatar" [alt]="utilisateur?.pseudo" class="post-avatar">
+                            <h4 class="post-author">{{ utilisateurClicke?.pseudo }}</h4>
                             <h5 class="post-title">{{ post?.titre }}</h5>
                         </div>
                         <div class="post-body">
@@ -42,10 +54,11 @@
                             <button type="submit" class="sendComment">Envoyer</button>
                         </form>
                         <div class="post-comments">
-                            <h5 class="post-comment-title" (click)="afficherCommentaire(post)"><i class="fas fa-sort-down"></i>&nbsp;
-                                &nbsp;Commentaires</h5>
+                            <h5 class="post-comment-title" (click)="afficherCommentaire(post)"><i
+                                    class="fas fa-sort-down"></i>&nbsp; &nbsp;Commentaires</h5>
                             <div *ngIf="post.isCommentsVisible">
                                 <div class="commentUser" *ngFor="let commentaire of post.commentaires">
+                                    <i *ngIf="commentaire.id === utilisateur?.id" (click)="deleteComment(commentaire.id)" class="fas fa-trash"></i>
                                     <h4> {{ commentaire?.pseudo}}</h4>
                                     <p class="comment-author">{{ commentaire?.comment }}</p>
                                     <p class="comment-date">{{ commentaire?.createdAt | date: 'dd/MM/yyyy HH:mm'}}</p>
@@ -58,23 +71,7 @@
                     </div>
                 </div>
             </div>
-        </section>
-        <section class="createPost">
-            <i id='cross' class="fas fa-times" (click)="boutonCroixPost()"></i>
-            <form #loginForm = 'ngForm' (submit)="createPost()">
-                <div class="titre">
-                    <h4>Titre du post</h4>
-                    <label for="titrePost"></label>
-                    <input  type="text" class="titrePost" id="titrePost" name="titre" placeholder="Titre du post" [(ngModel)]="nouveauPost.titre">
-                </div>
-                <div class="description">
-                    <h4>Description du post</h4>
-                    <label for="descriptionPost"></label>
-                    <textarea type="text" class="descriptionPost" id="descriptionPost" name="post" placeholder="Description du post" [(ngModel)]="nouveauPost.post"></textarea>
-                </div>
-                <button type="submit" class="btnPost">Créer mon post</button>
-            </form>
-        </section>
+        </div>  
         <aside>
             <div class="search">
                 <div class="searchInput">

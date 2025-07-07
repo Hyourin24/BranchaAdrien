@@ -18,7 +18,8 @@
             <h2 (click)="pageSession()"><i class="fas fa-comments"></i>&nbsp; &nbsp; Session </h2>
             <h2 (click)="pageProfil()"><i class="fas fa-user"></i>&nbsp; &nbsp; Profil </h2>
             <h2 id="grass" (click)="pageSearch()"><i class="fas fa-search"></i>&nbsp; &nbsp; Rechercher </h2>
-            <h2 (click)="pageSetting()"><i class="fas fa-cog"></i>&nbsp; &nbsp; Paramètres </h2>
+            <h2 href="" (click)="pageSetting()" *ngIf="utilisateur?.role == 'Admin'"><i class="fas fa-cog"></i>&nbsp; &nbsp;
+                Dashboard </h2>
             <h2 (click)="pageDeconnexion()"><i class="fas fa-heart-broken"></i>&nbsp; &nbsp; Déconnexion</h2>
             <button class="createPost"> Créer un post </button>
         </section>
@@ -33,54 +34,20 @@
                     </button>
                 </div>
             
-                <div class="globalUserResults">
-                    <div *ngFor="let utilisateur of resultatsFiltres" class="user-card">
-                        <img [src]="utilisateur.avatar || 'https://sbcf.fr/wp-content/uploads/2018/03/sbcf-default-avatar.png'"
-                            alt="Avatar" class="user-avatar">
-                        <p class="user-name">{{ utilisateur.pseudo }}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="contenuClick" *ngIf="idClick">
-                <div class="contenu">
-                    <div class="userI">
-                        <img [src]="utilisateurClicke?.avatar" [alt]="utilisateur?.pseudo" class="avatar">
-                        <h3>{{ utilisateurClicke?.pseudo }}</h3>
-                    </div>
-                    <div class="infos">
-                        <h4 (click)="boutonAbonnes()">{{ followerCount }} <br>&nbsp;&nbsp;&nbsp;Abonnés&nbsp;&nbsp;&nbsp;</h4>
-                        <h4 (click)="boutonAbonnement()">{{ followingCount }} <br>Abonnements</h4>
-                        <h4>{{ postCount }} <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Posts&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                    </div>
-                    <div class="post-list">
-                        <div class="post-card" *ngFor="let post of posts">
-                            <div class="post-header">
-                                <img [src]="utilisateurClicke?.avatar" [alt]="utilisateur?.pseudo" class="post-avatar">
-                                <h4 class="post-author">{{ utilisateurClicke?.pseudo }}</h4>
-                                <h5 class="post-title">{{ post?.titre }}</h5>
-                            </div>
-                            <div class="post-body">
-                                <p>{{ post?.post }}</p>
-                                <p>{{ post?.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
-                            </div>
-                            <div class="post-comments">
-                                <h5 class="post-comment-title" (click)="afficherCommentaire(post)"><i
-                                        class="fas fa-sort-down"></i>&nbsp; &nbsp;Commentaires</h5>
-                                <div *ngIf="post.isCommentsVisible">
-                                    <div class="commentUser" *ngFor="let commentaire of post.commentaires">
-                                        <h4> {{ commentaire?.pseudo}}</h4>
-                                        <p class="comment-author">{{ commentaire?.comment }}</p>
-                                        <p class="comment-date">{{ commentaire?.createdAt | date: 'dd/MM/yyyy HH:mm'}}</p>
-                                        <div *ngIf="!commentaire">
-                                            <p>Aucun commentaire</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                <div *ngFor="let utilisateur of resultatsFiltres">
+                    <ng-container *ngIf="utilisateur?.id">
+                        <div class="user-card" (click)="ouvrirProfil(utilisateur.id!)">
+                            <div class="profil"></div>
+                            <img [src]="utilisateur.avatar || 'https://sbcf.fr/wp-content/uploads/2018/03/sbcf-default-avatar.png'"
+                                alt="Avatar" class="user-avatar">
+                            <p class="user-name">{{ utilisateur.pseudo }}</p>
                         </div>
-                    </div>
+                    </ng-container>
                 </div>
+                  
             </div>
+            
+             
         </section>
         <aside>
             <div class="search">
@@ -92,7 +59,7 @@
                     <div *ngFor="let follow of following" class="following-item">
                         <img [src]="follow.utilisateur?.avatar || 'https://sbcf.fr/wp-content/uploads/2018/03/sbcf-default-avatar.png'"
                             alt="Avatar" class="avatar-img">
-                        <div class="pseudo">
+                        <div class="pseudo" *ngIf="follow.utilisateur?.id" (click)="ouvrirProfil(follow.utilisateur.id)">
                             {{ follow.utilisateur?.pseudo || 'Utilisateur inconnu' }}
                         </div>
                     </div>

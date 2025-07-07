@@ -48,6 +48,19 @@ main {
     height: 94vh;
 }
 
+.follow, 
+.unfollow {
+    background-color: #ffffff;
+    color: #323734;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-left: 42%;
+    margin-top: 30px;
+    cursor: pointer;
+}
+
 .left {
     padding-top: 50px;
     border-right: 1px solid #828282;
@@ -69,6 +82,25 @@ main {
 .left h2:hover {
     font-weight: 700;
 
+}
+
+.left button {
+    background-color: #ffffff;
+    color: #323734;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-left: 25%;
+    margin-top: 30px;
+    cursor: pointer;
+}
+
+.left button:hover {
+    background-color: #323734;
+    color: #ffffff;
+    transition: 0.3s;
+    border-color: #ffffff;
 }
 
 #grass {
@@ -94,25 +126,27 @@ main {
     border-color: #ffffff;
 }
 
-.middle {
+
+
+.contenuClick {
     background-color: #1b1d1b;
     overflow-y: auto;
 }
 
-.middle::-webkit-scrollbar {
+.contenuClick::-webkit-scrollbar {
     width: 8px;
 }
 
-.middle::-webkit-scrollbar-track {
+.contenuClick::-webkit-scrollbar-track {
     background: #1b1d1b;
 }
 
-.middle::-webkit-scrollbar-thumb {
+.contenuClick::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 10px;
 }
 
-.middle::-webkit-scrollbar-thumb:hover {
+.contenuClick::-webkit-scrollbar-thumb:hover {
     background: #444;
 }
 
@@ -214,6 +248,27 @@ main {
     height: 40px;
     width: 40px;
     border-radius: 100px;
+}
+
+.createC {
+    padding: 5px;
+    width: 100%;
+    margin-top: 10px;
+    height: 100px;
+    color: #ffffff;
+    background-color: #242524;
+    resize: none;
+    border: 1px solid #444;
+}
+
+.sendComment {
+    font-size: 15px;
+    color: #8b8b8b;
+    border: none;
+    padding: 10px;
+    background-color: #242524;
+    cursor: pointer;
+    border: 1px solid #444;
 }
 
 
@@ -407,4 +462,3 @@ aside {
     color: #f0f0f0;
     font-weight: 500;
 }
-

@@ -5,7 +5,9 @@ import { FilComponent } from './pages/4. fil/fil.component';
 import { SessionrpComponent } from './pages/5. sessionrp/sessionrp.component';
 import { GestionCompteComponent } from './pages/6. gestion-compte/gestion-compte.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
-import { ParaComponent } from './pages/7. para/para.component';
+import { ParaComponent } from './pages/7. dashboard/para.component';
+import { InscriptionComponent } from './pages/2. inscription/inscription.component';
+import { ProfilIdComponent } from './pages/8. profil-id/profil-id.component';
 
 export const routes: Routes = [{
     path: '',
@@ -16,14 +18,17 @@ export const routes: Routes = [{
     path: "connexion",
     component: AuthComponent
 },{
+    path: "inscription",
+    component: InscriptionComponent
+},{
     path: "accueil",
     component: AccueilComponent
 },{
     path: "fil",
     component: FilComponent
 }, { 
-    path: 'fil/:id', 
-    component: FilComponent 
+    path: 'profil/:id', 
+    component: ProfilIdComponent
 },{
     path: "session",
     component: SessionrpComponent

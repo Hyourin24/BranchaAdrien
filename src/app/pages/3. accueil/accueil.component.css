@@ -272,7 +272,7 @@ aside {
 
 .post-header {
     margin-bottom: 1rem;
-    border-bottom: 1px solid #555;
+    
     padding-bottom: 0.5rem;
 }
 
@@ -324,8 +324,19 @@ aside {
     cursor: pointer;
 }
 
+.post-comments button {
+    font-size: 1rem;
+    color: #ffffff;
+    background-color: #37bd8a;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    transform: translate(140%, -50%);
+}
+
 .commentUser {
-    display: none;
     flex-direction: column;
     padding: 10px;
     cursor: pointer;
@@ -343,6 +354,29 @@ aside {
     font-size: 1rem;
     line-height: 1.5;
 }
+
+.createC {
+    padding: 5px;
+    width: 100%;
+    margin-top: 10px;
+    height: 100px;
+    color: #ffffff;
+    background-color: #242524;
+    resize: none;
+    border: 1px solid #444;
+}
+
+.sendComment {
+    font-size: 15px;
+    color: #8b8b8b;
+    border: none;
+    padding: 10px;
+    background-color: #242524;
+    cursor: pointer;
+    border: 1px solid #444;
+}
+
+
 
 
 /* ----------------------------Créer un post-------------------------------- */

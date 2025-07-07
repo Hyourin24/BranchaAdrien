@@ -18,7 +18,8 @@
             <h2  (click)="pageSession()"><i class="fas fa-comments"></i>&nbsp; &nbsp; Session </h2>
             <h2 id="grass" (click)="pageProfil()"><i class="fas fa-user"></i>&nbsp; &nbsp; Profil </h2>
             <h2  (click)="pageSearch()"><i class="fas fa-search"></i>&nbsp; &nbsp; Rechercher </h2>
-            <h2  (click)="pageSetting()"><i class="fas fa-cog"></i>&nbsp; &nbsp; Paramètres </h2>
+            <h2 href="" (click)="pageSetting()" *ngIf="utilisateur?.role == 'Admin'"><i class="fas fa-cog"></i>&nbsp; &nbsp;
+                Dashboard </h2>
             <h2  (click)="pageDeconnexion()"><i class="fas fa-heart-broken"></i>&nbsp; &nbsp; Déconnexion</h2>
             <button (click)="boutonCreatePost()"> Créer un post </button>
         </section>
@@ -36,6 +37,7 @@
                 </div>
                 <div class="post-list">
                     <div class="post-card" *ngFor="let post of posts">
+                        
                         <div class="settingPost">
                             <i (click)="supprimerPost(post.id)" *ngIf="post.user_id === utilisateur?.id" id="trash" class="fas fa-trash"></i>
                             <i (click)="afficherModify(post.id)" class="fas fa-cog"></i>
@@ -49,17 +51,25 @@
                             <p>{{ post?.post }}</p>
                             <p>{{ post?.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
                         </div>
+                        <form (ngSubmit)="createComment(post.id, post.commentaireTemporaire)">
+                            <label for="create"></label>
+                            <textarea type="text" class="createC" placeholder="Votre commentaire"
+                            [(ngModel)]="post.commentaireTemporaire" name="comment-{{ post.id }}"></textarea>
+                            <button type="submit" class="sendComment">Envoyer</button>
+                        </form>
                         <div class="post-comments">
-                            <h5 class="post-comment-title" (click)="afficherCommentaire(post)"><i class="fas fa-sort-down"></i>&nbsp; &nbsp;Commentaires</h5>
+                            <h5 class="post-comment-title" (click)="afficherCommentaire(post)"><i class="fas fa-sort-down"></i>&nbsp;
+                                &nbsp;Commentaires</h5>
                             <div *ngIf="post.isCommentsVisible">
-                            <div class="commentUser" *ngFor="let commentaire of post.commentaires">
-                                <h4> {{ commentaire?.pseudo}}</h4>
-                                <p class="comment-author">{{ commentaire?.comment }}</p>
-                                <p class="comment-date">{{ commentaire?.createdAt | date: 'dd/MM/yyyy  HH:mm'}}</p>
-                                <div *ngIf="!commentaire">
-                                    <p>Aucun commentaire</p>
+                                <div class="commentUser" *ngFor="let commentaire of post.commentaires">
+                                    <i  *ngIf="commentaire.user_id === utilisateur?.id" (click)="deleteComment(commentaire.id)" class="fas fa-trash"></i>
+                                    <h4> {{ commentaire?.pseudo}}</h4>
+                                    <p class="comment-author">{{ commentaire?.comment }}</p>
+                                    <p class="comment-date">{{ commentaire?.createdAt | date: 'dd/MM/yyyy HH:mm'}}</p>
+                                    <div *ngIf="!commentaire">
+                                        <p>Aucun commentaire</p>
+                                    </div>
                                 </div>
-                            </div>
                             </div>
                         </div>
                         <div class="modifyPost">
@@ -81,11 +91,10 @@
                                 <button type="submit" class="btnPost">Modifier mon post</button>
                             </form>
                         </div>
-                    </div>
-                    
+                    </div>                    
                 </div>
-
             </div>
+            
         </section>
         <section class="listeAbonnements">
             <i (click)="boutonCroixAbonnement()" class="fas fa-times"></i>
@@ -131,6 +140,7 @@
                 <button type="submit" class="btnPost">Créer mon post</button>
             </form>
         </section>
+        <div class="modal-overlay" *ngIf="popupVisible"></div>
         <section class="editProfil">
             <i id='cross'class="fas fa-times" (click)="boutonCroixModifyProfil()"></i>
             <form #loginForm="ngForm" (submit)="modifyUser()">

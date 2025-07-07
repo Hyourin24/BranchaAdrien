@@ -1,0 +1,77 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+
+    <title>Connexion/Inscription</title>
+</head>
+
+<body>
+    <main>
+        <section class="choix">
+            <section class="choixDieux">
+                <div class="leftPart">
+                    <h2>Votre dieu:</h2>
+
+                    <div *ngIf="selectedGod" class="selected-god-display">
+                        <img [src]="selectedGod.image_url" [alt]="selectedGod.nom" class="selected-god-image" />
+                        <h3>{{ selectedGod.nom }}</h3>
+                        <h4>{{ selectedGod.mythologie }}</h4>
+                        <p>{{ selectedGod.description }}</p>
+                        <button class="bouttonConfirmer" (click)="boutonFormulaireInscription()"> Confirmer </button>
+                    </div>
+                </div>
+                <div class="rightPart">
+                    <div class="searchBar">
+                        <div class="input">
+                            <input type="search" placeholder="Rechercher..." class="btn-mySearch" [(ngModel)]="recherche" (input)="appliquerFiltres()">
+                        </div>
+                        <div class="search">
+                            <button>Rechercher</button>
+                        </div>
+                    </div>
+                    <!-- //------ -->
+                    <div class="godPart">
+                        <div class="god" *ngFor="let god of resultatsFiltres" (click)="selectGod(god)">
+                            <div class="god-avatar" [ngStyle]="{ 'background-image': 'url(' + god.image_url + ')' }"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- //////////////////////////////// -->
+
+        <section class="formulaireInscription">
+            <form #inscriptionForm="ngForm" (submit)="inscription()">
+                <div class="nameGroup">
+                    <h4>Nom d'utilisateur</h4>
+                    <label for="nom"></label>
+                    <input class="form-control" id="nom" name="nom" [(ngModel)]="pseudo" />
+                </div>
+                <div class="passwordGroup">
+                    <h4>Mot de passe</h4>
+                    <label for="password"></label>
+                    <input class="form-control" type="password" id="password" name="password" [(ngModel)]="password" />
+                </div>
+                <div class="email">
+                    <h4>Email</h4>
+                    <label for="password"></label>
+                    <input class="form-control" type="email" id="email" name="email" [(ngModel)]="email" />
+                </div>
+                <button type="submit" class="btn btn-primary" (click)="boutonFinalisation()">
+                    Finaliser mon inscription
+                </button>
+            </form>
+        </section>
+
+        <!-- //////////////////////////////// -->
+
+        <section class="finalisation">
+            <h2>Votre compte a bien été crée !</h2>
+            <a (click)="clickConnexion()">Me connecter</a>
+        </section>
+    </main>    
+</body>

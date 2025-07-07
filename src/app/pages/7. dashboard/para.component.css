@@ -75,28 +75,11 @@ main {
     font-weight: 700;
 }
 
-.createPost {
-    background-color: #ffffff;
-    color: #323734;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 1.2rem;
-    font-weight: 500;
-    margin-left: 25%;
-    margin-top: 30px;
-    cursor: pointer;
-}
-
-.createPost:hover {
-    background-color: #323734;
-    color: #ffffff;
-    transition: 0.3s;
-    border-color: #ffffff;
-}
-
-
+/* Middle content area */
 .middle {
     background-color: #1b1d1b;
+    flex-grow: 1;
+    padding: 30px 40px;
     overflow-y: auto;
 }
 
@@ -117,35 +100,98 @@ main {
     background: #444;
 }
 
-.usertList {
-    background-color: #2a2f2d;
-    padding: 20px;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-    color: #f1f1f1;
-    font-family: 'Segoe UI', sans-serif;
-    transition: background-color 0.3s ease;
-    margin-top: 10px;
-    margin: 0 auto;
-    display: flex;
-    
+/* Section Titles */
+.middle>div {
+    margin-bottom: 40px;
 }
 
-.usertList:hover {
-    background-color: #343a38;
-}
-
-.usertList p {
-    margin: 5px 0;
-    font-size: 16px;
-    color: #80ffd3;
-}
-
-.usertList strong {
+.middle h2 {
+    margin-bottom: 10px;
+    font-size: 22px;
     color: #ffffff;
 }
 
+/* Input styling */
+input[type="text"] {
+    padding: 8px;
+    width: 300px;
+    border-radius: 4px;
+    border: 1px solid #999;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
 
+/* Tables */
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background-color: #292c2b;
+}
 
+.user-table thead {
+    background-color: #3a3f3d;
+}
+
+.user-table th,
+.user-table td {
+    padding: 10px;
+    border: 1px solid #444;
+    text-align: left;
+}
+
+.user-table th {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.user-table td {
+    color: #ddd;
+    font-size: 14px;
+}
+
+/* Buttons */
+button.deleteGod,
+button.deletePost,
+button.updateActive,
+button.updateInactive {
+    padding: 5px 10px;
+    border: none;
+    font-size: 13px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 2px;
+    transition: background-color 0.3s;
+}
+
+button.deleteGod,
+button.deletePost {
+    background-color: #c0392b;
+    color: white;
+}
+
+button.deleteGod:hover,
+button.deletePost:hover {
+    background-color: #e74c3c;
+}
+
+button.updateActive {
+    background-color: #27ae60;
+    color: white;
+}
+
+button.updateActive:hover {
+    background-color: #2ecc71;
+}
+
+button.updateInactive {
+    background-color: #e67e22;
+    color: white;
+}
+
+button.updateInactive:hover {
+    background-color: #f39c12; 
+}
 
 /* ===== ASIDE (UTILISATEURS ACTIFS) ===== */
 

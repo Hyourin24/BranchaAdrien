@@ -136,6 +136,59 @@ export class AccueilComponent {
     });
   }
 
+  afficherCommentaire(post: any) {
+    this.httpTestService.getCommentsByPost(post.id).subscribe(comments => {
+      post.commentaires = comments;
+
+      forkJoin({
+        commentJoin: this.httpTestService.getCommentsByPost(post.id),
+        usersJoin: this.httpTestService.getUser()
+      }).subscribe(({ commentJoin, usersJoin }) => {
+        post.commentaires = commentJoin.map((c: any) => {
+          const user = usersJoin.find((u: any) => u.id === c.user_id);
+          return {
+            ...c,
+            pseudo: user?.pseudo || 'Commentaire inconnu'
+          };
+        });
+      post.isCommentsVisible = !post.isCommentsVisible;
+      console.log("Commentaires :", post.commentaires);
+      })
+    }
+  )}
+
+  createComment(postId: number, commentaire: string): void {
+    const commentBody = { comment: commentaire };
+  
+    this.httpTestService.postComment(postId, commentBody).subscribe({
+      next: (response) => {
+        console.log("Commentaire créé :", response, "Post ID :", postId);
+        
+        // Vider uniquement le champ de commentaire du bon post
+        this.posts = this.posts.map(p =>
+          p.id === postId
+            ? { ...p, commentaireTemporaire: '' }
+            : p
+        );
+  
+        // Optionnel : recharger les commentaires (sans reload)
+        // this.reloadCommentaires(postId); 
+      },
+      error: (error) => {
+        console.error("Erreur création commentaire :", error);
+        alert("Le commentaire est requis.");
+      }
+    });
+  }
+  ouvrirProfil(id: number) {
+    this.router.navigate(['/profil', id]);
+    if (id === undefined) {
+      console.error("L'ID de l'utilisateur est indéfini.");
+    }
+  }
+  
+  
+
   boutonCreatePost() {
     const post = document.querySelector('.createPost') as HTMLElement;
     post.style.display = 'block';

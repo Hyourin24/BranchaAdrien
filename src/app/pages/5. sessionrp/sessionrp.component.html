@@ -18,23 +18,33 @@
             <h2 id="grass" (click)="pageSession()"><i class="fas fa-comments"></i>&nbsp; &nbsp; Session </h2>
             <h2 (click)="pageProfil()"><i class="fas fa-user"></i>&nbsp; &nbsp; Profil </h2>
             <h2 (click)="pageSearch()"><i class="fas fa-search"></i>&nbsp; &nbsp; Rechercher </h2>
-            <h2 (click)="pageSetting()"><i class="fas fa-cog"></i>&nbsp; &nbsp; Paramètres </h2>
+            <h2 href="" (click)="pageSetting()" *ngIf="utilisateur?.role == 'Admin'"><i class="fas fa-cog"></i>&nbsp; &nbsp;
+                Dashboard </h2>
             <h2 (click)="pageDeconnexion()"><i class="fas fa-heart-broken"></i>&nbsp; &nbsp; Déconnexion</h2>
             <button class="createPost"> Créer un post </button>
         </section>
         <section class="middle">
-            <div class="abonnement"></div>
-            <div class="postList">
-                <!-- List des posts ici -->
+            <div class="usertList" *ngFor="let session of session">
+                <p><strong>&nbsp;&nbsp; De :</strong> {{ session.utilisateur.pseudo }}</p>
+                <p><strong>&nbsp;&nbsp; À :</strong> {{ session.destinataire.pseudo }}</p>
+                
             </div>
         </section>
         <aside>
-            <div class="activeUser">
-                <div class="search">
+            <div class="search">
+                <div class="searchInput">
                     <label for="user"><i class="fas fa-search"></i></label>
                     <input type="text" class="searchUser" placeholder="Rechercher un utilisateur...">
                 </div>
-                <!-- Liste des utilisateurs actifs -->
+                <div class="listeFollowing">
+                    <div *ngFor="let follow of following" class="following-item">
+                        <img [src]="follow.utilisateur?.avatar || 'https://sbcf.fr/wp-content/uploads/2018/03/sbcf-default-avatar.png'"
+                            alt="Avatar" class="avatar-img">
+                        <div class="pseudo" *ngIf="follow.utilisateur?.id" (click)="ouvrirProfil(follow.utilisateur.id)">
+                            {{ follow.utilisateur?.pseudo || 'Utilisateur inconnu' }}
+                        </div>
+                    </div>
+                </div>
             </div>
         </aside>
     </main>

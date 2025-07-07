@@ -49,6 +49,11 @@ export class FilComponent {
         const userId = this.route.snapshot.paramMap.get('id');
         this.idClick = userId ? parseInt(userId) : null;
         console.log("ID utilisateur dans l'URL :", userId);
+
+        this.httpTestService.getMe().subscribe(utilisateur => {
+          this.utilisateur = utilisateur
+          console.log("Utilisateur connecté :", this.utilisateur);
+        });
         
         if (this.idClick) {
           const id = userId;
@@ -118,6 +123,13 @@ export class FilComponent {
   boutonCroixAbonnes() {
     const abonnement = document.querySelector('.listeAbonnes') as HTMLElement;
     abonnement.style.display = 'none';
+  }
+
+  ouvrirProfil(id: number) {
+    this.router.navigate(['/profil', id]);
+    if (id === undefined) {
+      console.error("L'ID de l'utilisateur est indéfini.");
+    }
   }
 
   afficherCommentaire(post: any) {
