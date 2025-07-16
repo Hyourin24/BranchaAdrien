@@ -18,8 +18,7 @@
             <h2 (click)="pageSession()"><i class="fas fa-comments"></i>&nbsp; &nbsp; Session </h2>
             <h2 (click)="pageProfil()"><i class="fas fa-user"></i>&nbsp; &nbsp; Profil </h2>
             <h2 (click)="pageSearch()"><i class="fas fa-search"></i>&nbsp; &nbsp; Rechercher </h2>
-            <h2 href="" (click)="pageSetting()" *ngIf="utilisateur?.role == 'Admin'"><i class="fas fa-cog"></i>&nbsp; &nbsp;
-                Dashboard </h2>
+            <h2 (click)="pageSetting()" *ngIf="utilisateur?.role == 'Admin'"><i class="fas fa-cog"></i>&nbsp; &nbsp; Dashboard </h2>
             <h2 (click)="pageDeconnexion()"><i class="fas fa-heart-broken"></i>&nbsp; &nbsp; Déconnexion</h2>
             <button (click)="boutonCreatePost()"> Créer un post </button>
         </section>

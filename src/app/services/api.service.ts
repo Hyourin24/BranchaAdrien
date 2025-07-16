@@ -51,15 +51,6 @@ export class ApiService {
     return this.http.get<Utilisateur[]>(`${this.api_url}/users/user/${id}`, { headers, withCredentials: true });
   }
 
-  updateActiveUser(id: any): Observable<any> {
-    const token = localStorage.getItem('token');
-    if(!token) {
-      throw new Error('Token not found');
-    }
-    const headers = { Authorization: `Bearer ${token}` };
-    return this.http.put<Utilisateur[]>(`${this.api_url}/users/actif/${id}`, { headers, withCredentials: true });
-  }
-
   getGods(): Observable<any> {
     return this.http.get<God[]>(`${this.api_url}/god`, { withCredentials: true });
   }
@@ -116,7 +107,7 @@ export class ApiService {
       throw new Error('Token not found');
     }
     const headers = { Authorization: `Bearer ${token}` };
-    return this.http.get<Comment[]>(`${this.api_url}/comment/${post_id}`, { headers, withCredentials: true }); 
+    return this.http.get<Comment[]>(`${this.api_url}/comment/allpost/${post_id}`, { headers, withCredentials: true }); 
   }
   
   postComment(post_id: any, body: any): Observable<any> {
@@ -202,7 +193,31 @@ export class ApiService {
     return this.http.get<SessionChat>(`${this.api_url}/chatSession/chat`, { headers, withCredentials: true });
   }
 
+  deleteCommentAdmin(comment_id: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    if(!token) throw new Error('Token not found');
+    const headers = { Authorization: `Bearer ${token}` };
+    return this.http.delete<Comment>(`${this.api_url}/comment/admin/${comment_id}`, { headers, withCredentials: true });
+  }
+
+  deletePostAdmin(post_id: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    if(!token) throw new Error('Token not found');
+    const headers = { Authorization: `Bearer ${token}` };
+    return this.http.delete<Comment>(`${this.api_url}/post/admin/${post_id}`, { headers, withCredentials: true });
+  }
+
+  updateActiveUser(id: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    if(!token) {
+      throw new Error('Token not found');
+    }
+    const headers = { Authorization: `Bearer ${token}` };
+    return this.http.put<Utilisateur[]>(`${this.api_url}/users/actif/${id}`, { headers, withCredentials: true });
+  }
+
   deleteToken() {
     localStorage.removeItem('token');
+    localStorage.removeItem('user')
   }
 }

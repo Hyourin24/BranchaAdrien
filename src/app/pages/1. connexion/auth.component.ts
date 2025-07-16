@@ -40,12 +40,19 @@ export class AuthComponent {
 
     this.httpTestService.connexion(authBody).subscribe({
       next: response => {
+        const user = response.user;
+
+        if (user.actif === 'Banni') {
+          alert("Votre compte a été banni. Veuillez contacter un administrateur.");
+          return;
+        }
         localStorage.setItem('user', JSON.stringify(response.user));
         localStorage.setItem('token', response.token); 
         this.router.navigate(['/accueil']);
       },
       error: () => {
         alert('Pseudo ou mot de passe invalide');
+        
       }
     });
   }

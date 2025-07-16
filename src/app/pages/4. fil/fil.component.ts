@@ -139,16 +139,9 @@ export class FilComponent {
       forkJoin({
         commentJoin: this.httpTestService.getCommentsByPost(post.id),
         usersJoin: this.httpTestService.getUser()
-      }).subscribe(({ commentJoin, usersJoin }) => {
-        post.commentaires = commentJoin.map((c: any) => {
-          const user = usersJoin.find((u: any) => u.id === c.user_id);
-          return {
-            ...c,
-            pseudo: user?.pseudo || 'Commentaire inconnu'
-          };
-        });
-      post.isCommentsVisible = !post.isCommentsVisible;
-      console.log("Commentaires :", post.commentaires);
+      }).subscribe(() => {
+        post.isCommentsVisible = !post.isCommentsVisible;
+        console.log("Commentaires :", post.commentaires);
       })
     }
   )}

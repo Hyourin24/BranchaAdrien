@@ -170,7 +170,7 @@ export class ParaComponent {
     const confirmation = confirm("Êtes-vous sûr de vouloir supprimer ce post ?");
     if (!confirmation) return;
   
-    this.httpTestService.deletePost(post_id).subscribe({
+    this.httpTestService.deletePostAdmin(post_id).subscribe({
       next: () => {
 
         this.resultatPost = this.resultatPost.filter(post => post.id !== post_id);
@@ -202,7 +202,7 @@ export class ParaComponent {
     const confirmation = confirm("Êtes-vous sûr de vouloir supprimer ce Dieu ?");
     if (!confirmation) return;
 
-    this.httpTestService.deleteComment(comment_id).subscribe({
+    this.httpTestService.deleteCommentAdmin(comment_id).subscribe({
       next: () => {
         this.commentList = this.commentList.filter(comment => comment.id !== comment_id);
         alert("Commentaire supprimé avec succès.");

@@ -46,6 +46,7 @@
                                 &nbsp;Commentaires</h5>
                             <div *ngIf="post.isCommentsVisible">
                                 <div class="commentUser" *ngFor="let commentaire of post.commentaires">
+                                    <i *ngIf="commentaire.user_id === utilisateur?.id" (click)="deleteComment(commentaire.id)" class="fas fa-trash"></i>
                                     <h4> {{ commentaire?.pseudo}}</h4>
                                     <p class="comment-author">{{ commentaire?.comment }}</p>
                                     <p class="comment-date">{{ commentaire?.createdAt | date: 'dd/MM/yyyy HH:mm'}}</p>

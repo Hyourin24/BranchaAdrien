@@ -226,3 +226,70 @@ aside {
     transition: transform 0.2s ease;
     border: 1px solid #dedddd;
 }
+
+/* ---------- TABLETTE : ≤ 1024px ---------- */
+@media screen and (max-width: 1024px) {
+    main {
+        grid-template-columns: 1fr;
+        /* passage en une seule colonne */
+        grid-template-rows: auto auto auto;
+        height: auto;
+    }
+
+    .left {
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        gap: 10px;
+        padding: 15px;
+        border-right: none;
+        border-bottom: 1px solid #828282;
+    }
+
+    .left h2 {
+        font-size: 1rem;
+        margin-left: 0;
+    }
+
+    .left i {
+        display: none;
+    }
+
+    .left button {
+        margin: 0;
+        font-size: 1rem;
+        padding: 8px 16px;
+    }
+
+    .middle {
+        padding: 15px;
+        overflow-x: hidden;
+    }
+
+    aside {
+        border-left: none;
+        padding: 10px;
+    }
+
+    .createPost {
+        width: 90%;
+        height: auto;
+        margin: 20px auto;
+    }
+
+    .titrePost,
+    .descriptionPost {
+        width: 90%;
+        margin-left: 5%;
+    }
+
+    .createPost button {
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+    }
+
+    #cross {
+        margin-left: 90%;
+    }
+}

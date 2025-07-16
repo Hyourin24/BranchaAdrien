@@ -70,22 +70,18 @@ export class GestionCompteComponent {
       console.log("Liste posts enrichis", this.posts);
     });
   });
-
-    // Récupérer la liste des abonnements
     this.httpTestService.getFollowing().subscribe(following => {
       this.following = following;
       this.followingCount = following.length;
       console.log("Liste abonnement", this.following)
       console.log("Nombre abonnement:", this.followingCount)
     });
-    // Récupérer la liste des abonnés
     this.httpTestService.getFollower().subscribe(follower => {
       this.follower = follower
       this.followerCount = follower.length;
       console.log("Liste abonnés", this.follower)
       console.log("Nombre abonnés:", this.followerCount)
     })
-    // Joindre les id des utilisateurs avec les user_id des abonnements
     forkJoin({
       followingJoin: this.httpTestService.getFollowing(),
       usersJoin: this.httpTestService.getUser()
@@ -101,7 +97,6 @@ export class GestionCompteComponent {
       });
       console.log("Liste abonnements enrichis", this.following);
     });
-    //Joindre les id des utilisateurs avec les user_id des abonnés
     forkJoin({
       followerJoin: this.httpTestService.getFollower(),
       usersJoin: this.httpTestService.getUser()
@@ -124,7 +119,6 @@ export class GestionCompteComponent {
   // -------------------------------------------------------------------------------------------------------------------------------------------
   // -------------------------------------------------------------------------------------------------------------------------------------------
   selectedAvatarFile: File | null = null;
-
   onAvatarSelected(event: Event) {
     const fileInput = event.target as HTMLInputElement;
 
@@ -143,24 +137,20 @@ export class GestionCompteComponent {
   }
   async modifyUser() {
     let avatarBase64 = null;
-
     if (this.selectedAvatarFile) {
       avatarBase64 = await this.convertFileToBase64(this.selectedAvatarFile);
     }
-
     const modifyBody = {
       pseudo: this.utilisateur?.pseudo,
       password: this.password,
-      avatar: avatarBase64 // <- ajoute l'image si elle existe
+      avatar: avatarBase64
     };
-
     this.httpTestService.putUser(modifyBody).subscribe({
       next: (response) => {
         console.log("Modification réussie :", response);
         this.utilisateur = response.utilisateur;
         this.password = '';
         this.selectedAvatarFile = null;
-
         window.location.reload();
       },
       error: (error) => {
@@ -209,7 +199,6 @@ export class GestionCompteComponent {
     if (confirm('Es-tu sûr de vouloir supprimer ce commentaire ?')) {
       this.httpTestService.deleteComment(comment_id).subscribe({
         next: (response) => {
-          console.log("Commentaire supprimé :", response);
           window.location.reload();
         },
         error: (error) => {

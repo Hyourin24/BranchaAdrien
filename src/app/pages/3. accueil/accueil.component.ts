@@ -136,6 +136,19 @@ export class AccueilComponent {
     });
   }
 
+  deleteComment(comment_id: any) {
+    if (confirm('Es-tu sûr de vouloir supprimer ce commentaire ?')) {
+      this.httpTestService.deleteComment(comment_id).subscribe({
+        next: (response) => {
+          window.location.reload();
+        },
+        error: (error) => {
+          console.error("Erreur suppression commentaire :", error);
+        }
+      });
+    }
+  }
+
   afficherCommentaire(post: any) {
     this.httpTestService.getCommentsByPost(post.id).subscribe(comments => {
       post.commentaires = comments;
@@ -159,20 +172,14 @@ export class AccueilComponent {
 
   createComment(postId: number, commentaire: string): void {
     const commentBody = { comment: commentaire };
-  
     this.httpTestService.postComment(postId, commentBody).subscribe({
       next: (response) => {
         console.log("Commentaire créé :", response, "Post ID :", postId);
-        
-        // Vider uniquement le champ de commentaire du bon post
         this.posts = this.posts.map(p =>
           p.id === postId
             ? { ...p, commentaireTemporaire: '' }
             : p
         );
-  
-        // Optionnel : recharger les commentaires (sans reload)
-        // this.reloadCommentaires(postId); 
       },
       error: (error) => {
         console.error("Erreur création commentaire :", error);
