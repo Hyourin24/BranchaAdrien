@@ -6,11 +6,16 @@ import { God } from '../modules/Dieux';
 import { Follower } from '../modules/Follower';
 import { Posts } from '../modules/Posts';
 import { SessionChat } from '../modules/SessionChat';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
+
+   private api_url = environment.apiUrl;
+
+  constructor(private http: HttpClient) { }
 
   getMe(): Observable<any> {
     const token = localStorage.getItem('token');
@@ -24,9 +29,7 @@ export class ApiService {
   getPostsMe(id: (string | number | number[] | (string | undefined)[] | ((val: number) => number) | (string[] | undefined)[] | { AUD: string[]; BYN: (string | undefined)[]; IDR: string[]; INR: string[]; JPY: string[]; PHP: (string | undefined)[]; THB: string[]; TWD: string[]; USD: string[]; XXX: never[]; } | undefined)[]) {
     throw new Error('Method not implemented.');
   }
-  private api_url = 'http://localhost:3000';
-
-  constructor(private http: HttpClient) { }
+ 
 
 
   //Inscription
